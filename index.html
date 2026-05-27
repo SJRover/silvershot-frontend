@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SilverShot | Network Platform</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzBmMTcyYSIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZmlsbD0iI2NiZDVlMSIgZm9udC1zaXplPSI0NSIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TPC90ZXh0Pjwvc3ZnPg==">
+
     <style>
         :root {
             --silver-shine: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
@@ -19,7 +22,6 @@
             --text-color-primary: #0f172a;
         }
 
-        /* LIVE DARK COLOUR MODE OVERRIDES STYLE CLASSES */
         body.dark-theme-active {
             --silver-shine: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             --metallic-bg: #0f172a;
@@ -33,7 +35,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background: var(--silver-shine); background-attachment: fixed; color: var(--text-color-primary); min-height: 100vh; padding-bottom: 60px; transition: background 0.3s, color 0.3s; }
         
-        /* EXPANDED CONTAINER REAL ESTATE LAYOUT */
         .desktop-container { max-width: 1350px; margin: 0 auto; padding: 0 20px; }
 
         .auth-gateway-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
@@ -79,7 +80,6 @@
         .feed-selector-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
         body.dark-theme-active .feed-selector-btn.active { background: #f8fafc; color: #0f172a; border-color: #f8fafc; }
 
-        /* POST WIDTH ALLOCATION OPTIMIZATION */
         .feed-stream-column { display: flex; flex-direction: column; gap: 24px; width: 100%; max-width: 950px; }
 
         .post-card { background: var(--card-background); border-radius: 20px; border: 1px solid var(--card-border); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 20px; position: relative; }
@@ -98,7 +98,6 @@
         .admin-danger-purge-btn { background: #ef4444; border: none; color: white; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; cursor: pointer; transition: background 0.15s; }
         .admin-danger-purge-btn:hover { background: #dc2626; }
 
-        /* REDUCED DISPLAY CARD FRAME PORT HEIGHT FOR STREAM BALANCING */
         .image-display-area { width: 100%; height: 440px; border-radius: 12px; background-size: cover; background-position: center; background-color: #cbd5e1; margin-bottom: 16px; cursor: pointer; }
         .tag-pill-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
         .tag-pill { font-size: 0.75rem; background: rgba(0,0,0,0.05); padding: 4px 10px; border-radius: 12px; color: var(--text-color-primary); font-weight: 600; }
@@ -168,6 +167,9 @@
         .close-lightbox { position: absolute; top: -45px; right: 0; background: none; border: none; color: white; font-size: 2rem; cursor: pointer; }
 
         .toggle-setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 8px 0; border-bottom: 1px dashed var(--card-border); }
+        
+        .settings-toggle-btn { background: rgba(0,0,0,0.05); border: none; color: var(--text-color-primary); font-size: 0.85rem; font-weight: bold; padding: 8px 16px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
+        body.dark-theme-active .settings-toggle-btn { background: rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
@@ -306,6 +308,7 @@
                 <div class="messaging-layout-grid">
                     <div class="dm-sidebar-list" id="dm-active-threads-list"></div>
                     <div class="dm-chat-window">
+                        <div id="dm-active-channel-header" style="padding:12px 20px; border-bottom:1px solid var(--card-border); font-weight:bold; font-size:0.95rem; background:rgba(0,0,0,0.01); display:none;"></div>
                         <div class="dm-messages-scroll" id="chat-conversation-scroll-node">
                             <p style="text-align:center; color:var(--steel-gray); margin-top:40px;">Select a chat channel.</p>
                         </div>
@@ -336,10 +339,13 @@
                             <span class="badge-pill" id="label-profile-following-count">0 Following</span>
                             <span class="badge-pill" id="label-profile-country">Region</span>
                         </div>
+                        
+                        <button id="profile-panel-settings-toggle" class="settings-toggle-btn" onclick="toggleProfileSubSectionView()" style="display:none;">⚙️ Open Settings Menu</button>
+                        
                         <div id="profile-interaction-context-buttons" style="margin: 15px 0; display:flex; flex-direction:column; gap:8px;"></div>
 
-                        <div class="edit-form-box" id="profile-edit-management-box" style="margin-top:25px; border-top:1px solid #e2e8f0; padding-top:20px; text-align:left;">
-                            <h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; color:var(--steel-gray);">Account Settings</h4>
+                        <div class="edit-form-box" id="profile-edit-management-box" style="margin-top:25px; border-top:1px solid #e2e8f0; padding-top:20px; text-align:left; display:none;">
+                            <h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; color:var(--steel-gray); font-weight:bold;">Custom Configurations</h4>
                             
                             <div class="toggle-setting-row">
                                 <span>Dark Colour Mode</span>
@@ -373,19 +379,19 @@
                             <button class="action-submit-trigger" style="padding:10px; font-size:0.85rem; margin-bottom:20px;" onclick="dispatchProfileUpdatesToServer()">Save Settings</button>
 
                             <div style="margin-top:15px; border-top:1px solid var(--card-border); padding-top:15px;">
-                                <h5 style="font-size:0.8rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px;">Blocked Profiles</h5>
+                                <h5 style="font-size:0.8rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px; font-weight:bold;">Blocked Profiles</h5>
                                 <div id="blocked-users-list-container" style="max-height:120px; overflow-y:auto; font-size:0.85rem;"></div>
                             </div>
 
                             <div style="margin-top:20px; border-top:1px solid #ef4444; padding-top:15px; background:rgba(239,68,68,0.05); padding:10px; border-radius:12px;">
-                                <h5 style="color:#ef4444; font-size:0.8rem; text-transform:uppercase; margin-bottom:10px;">Permanently Delete Account</h5>
-                                <input type="password" id="delete-account-password-confirm" placeholder="Enter password to confirm...">
+                                <h5 style="color:#ef4444; font-size:0.8rem; text-transform:uppercase; margin-bottom:10px; font-weight:bold;">Permanently Delete Account</h5>
+                                <input type="password" id="delete-account-password-confirm" placeholder="Enter password to confirm..." style="margin-bottom:10px;">
                                 <button class="admin-danger-purge-btn" style="width:100%; padding:10px;" onclick="executeAutonomousAccountErasure()">Wipe My Entire History</button>
                             </div>
-
                         </div>
                     </div>
-                    <div>
+                    
+                    <div id="profile-display-gallery-column-pane">
                         <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px;">Top Gallery (Click to Expand)</h4>
                         <div class="hall-of-fame-grid" id="hall-of-fame-injection-slot"></div>
                         <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px;">Active Post</h4>
@@ -414,6 +420,7 @@
         let activeChatInterval = null;
         let globalClockDaemonInstance = null;
         let backgroundNotifLoopInstance = null;
+        let settingsPaneVisibilityState = false;
 
         let currentTargetAspectWidth = 1;
         let currentTargetAspectHeight = 1;
@@ -426,7 +433,6 @@
                     document.getElementById('application-auth-gateway').style.display = 'none';
                     document.getElementById('main-application-dashboard').style.display = 'block';
                     
-                    // Restore custom colour theme settings safely upon initialization
                     if (sessionState.darkMode) {
                         document.body.classList.add('dark-theme-active');
                     }
@@ -444,6 +450,24 @@
                 if (pane) pane.classList.remove('visible');
             });
         };
+
+        function toggleProfileSubSectionView() {
+            const configForm = document.getElementById('profile-edit-management-box');
+            const galleryView = document.getElementById('profile-display-gallery-column-pane');
+            const toggleButton = document.getElementById('profile-panel-settings-toggle');
+
+            settingsPaneVisibilityState = !settingsPaneVisibilityState;
+            
+            if (settingsPaneVisibilityState) {
+                configForm.style.display = "block";
+                galleryView.style.display = "none";
+                toggleButton.innerText = "📋 View Post Gallery";
+            } else {
+                configForm.style.display = "none";
+                galleryView.style.display = "block";
+                toggleButton.innerText = "⚙️ Open Settings Menu";
+            }
+        }
 
         function executeClientThemeSwitch() {
             const activeCheckbox = document.getElementById('form-field-dark-toggle').checked;
@@ -494,7 +518,7 @@
                         if (alert.type === 'message_request') messageContext = 'sent you a chat message authorization request.';
                         
                         row.innerHTML = `
-                            <strong>@${alert.fromUser}</strong> ${messageContext}
+                            <strong style="cursor:pointer;" onclick="viewProfileContext('${alert.fromUser}')">@${alert.fromUser}</strong> ${messageContext}
                             <div class="notif-time-stamp">${new Date(alert.createdAt).toLocaleTimeString()}</div>
                         `;
                         container.appendChild(row);
@@ -616,7 +640,7 @@
                 sessionState.blockedUsers = data.blockedUsers;
                 localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
                 alert(data.message);
-                navigateToPanel('feed');
+                renderFeedStreamTimeline();
             }
         }
 
@@ -652,9 +676,11 @@
                     const row = document.createElement('div');
                     row.className = "search-result-profile-card";
                     row.style.borderLeft = "4px solid var(--system-blue)";
+                    
+                    // LEADERBOARD VIEW PROFILE ROUTE INTERFACES LINK ATTACHED
                     row.innerHTML = `
                         <div>
-                            <strong>#${pos+1} ${u.fullName}</strong>
+                            <strong style="cursor:pointer;" onclick="viewProfileContext('${u.username}')">#${pos+1} ${u.fullName}</strong>
                             <p style="font-size:0.8rem; color:var(--steel-gray);">@${u.username} • Score: ${u.weeklyScore} Points (${u.currentWeeklyRank} globally)</p>
                         </div>
                         <button class="nav-button active" style="padding:6px 12px; font-size:0.75rem;" onclick="viewProfileContext('${u.username}')">View Profile</button>
@@ -704,8 +730,6 @@
             document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active-ratio'));
             document.getElementById('ratio-btn-' + btnId).classList.add('active-ratio');
         }
-
-        document.getElementById('form-view-signin').parentNode.style.display = 'block';
 
         function executeCanvasCropAlgorithm() {
             const sourceImg = document.getElementById('crop-source-buffer');
@@ -906,10 +930,9 @@
 
                 let adminControlMarkup = '';
                 if(sessionState.isAdmin) {
-                    adminControlMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑| Delete Post (Admin)</button>`;
+                    adminControlMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Delete Post (Admin)</button>`;
                 }
 
-                // LIGHTBOX INTEGRATION ADDED ON CLICK AT DISPLAY AREA
                 card.innerHTML = `
                     <div class="post-header">
                         <div class="post-header-left">
@@ -927,7 +950,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="image-display-area" style="background-image:url('${post.img}')" onclick="triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')})"></div>
+                    <div class="image-display-area" style="background-image:url('${post.img}')" onclick="event.stopPropagation(); triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')})"></div>
                     <div class="tag-pill-container">${tagsMarkup}</div>
                     <div class="caption-text-block">${post.caption}</div>
                     ${generateReactionToolbar(post)}
@@ -1007,7 +1030,7 @@
 
                 let postAdminMarkup = '';
                 if(sessionState.isAdmin) {
-                    postAdminMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑| Delete Post (Admin)</button>`;
+                    postAdminMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Delete Post (Admin)</button>`;
                 }
 
                 container.innerHTML = `
@@ -1058,6 +1081,9 @@
                 sessionState.darkMode = data.user.darkMode;
                 localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
                 alert("Profile updates saved.");
+                
+                // Keep sub view visible but reload values standardly
+                settingsPaneVisibilityState = true;
                 viewProfileContext('self');
             }
         }
@@ -1072,7 +1098,7 @@
                 <div class="post-card" style="box-shadow:none; border:none; padding:0; margin-bottom:0; background:transparent;">
                     <div class="post-header">
                         <div class="user-info-text">
-                            <h5>${item.fullName}</h5>
+                            <h5 style="cursor:pointer;" onclick="dismissLightboxOverlay(); viewProfileContext('${item.username}')">${item.fullName}</h5>
                             <h6>@${item.username}</h6>
                         </div>
                         <div class="post-lifespan-badge">${item.createdAt ? calculateTimeRemainingText(item.createdAt) : 'Showcase Gallery'}</div>
@@ -1089,12 +1115,13 @@
             let contextData = null;
             const buttonSlot = document.getElementById('profile-interaction-context-buttons');
             const blockedListContainer = document.getElementById('blocked-users-list-container');
+            const configToggle = document.getElementById('profile-panel-settings-toggle');
+            
             buttonSlot.innerHTML = '';
             blockedListContainer.innerHTML = '';
 
             if (target === 'self' || target.toLowerCase() === sessionState.username.toLowerCase()) {
                 
-                // Perform dynamic fetch verification loop for updating current scores
                 try {
                     const res = await fetch(`${API_BASE_URL}/api/profile/${sessionState.username}`);
                     if (res.ok) {
@@ -1104,8 +1131,21 @@
                     } else { contextData = sessionState; }
                 } catch(e) { contextData = sessionState; }
 
-                document.getElementById('profile-edit-management-box').style.display = 'block';
+                configToggle.style.display = "block";
                 
+                // Manage visual toggle positions cleanly on state reloads
+                const configForm = document.getElementById('profile-edit-management-box');
+                const galleryView = document.getElementById('profile-display-gallery-column-pane');
+                if (settingsPaneVisibilityState) {
+                    configForm.style.display = "block";
+                    galleryView.style.display = "none";
+                    configToggle.innerText = "📋 View Post Gallery";
+                } else {
+                    configForm.style.display = "none";
+                    galleryView.style.display = "block";
+                    configToggle.innerText = "⚙️ Open Settings Menu";
+                }
+
                 pendingAvatarBase64 = null;
                 document.getElementById('form-field-fullname-input').value = contextData.fullName || '';
                 document.getElementById('form-field-bio').value = contextData.bio || '';
@@ -1117,14 +1157,14 @@
                 const frame = document.getElementById('avatar-preview-frame');
                 frame.style.backgroundImage = contextData.avatarString ? `url('${contextData.avatarString}')` : 'none';
 
-                // Populate blocked users management interface blocks
                 if (contextData.blockedUsers && contextData.blockedUsers.length > 0) {
                     contextData.blockedUsers.forEach(blockedUser => {
                         const row = document.createElement('div');
                         row.style.display = "flex";
                         row.style.justifyContent = "space-between";
                         row.style.alignItems = "center";
-                        row.style.marginBottom = "6px";
+                        row.style.padding = "6px 0";
+                        row.style.borderBottom = "1px dotted var(--card-border)";
                         row.innerHTML = `
                             <span>@${blockedUser}</span>
                             <button class="nav-button" style="color:var(--system-blue); padding:2px 6px; font-size:0.75rem;" onclick="executeUnblockProfileTransaction('${blockedUser}')">Unblock</button>
@@ -1132,11 +1172,15 @@
                         blockedListContainer.appendChild(row);
                     });
                 } else {
-                    blockedListContainer.innerHTML = '<p style="color:var(--steel-gray); font-style:italic;">No profiles blocked.</p>';
+                    blockedListContainer.innerHTML = '<p style="color:var(--steel-gray); font-style:italic; padding:6px 0;">No profiles blocked.</p>';
                 }
 
             } else {
+                // Ensure external viewing collapses configurations structures automatically
+                settingsPaneVisibilityState = false;
+                configToggle.style.display = "none";
                 document.getElementById('profile-edit-management-box').style.display = 'none';
+                document.getElementById('profile-display-gallery-column-pane').style.display = 'block';
                 
                 try {
                     const res = await fetch(`${API_BASE_URL}/api/profile/${target}`);
@@ -1162,7 +1206,7 @@
                 const blockToggleBtn = document.createElement('button');
                 blockToggleBtn.className = "admin-danger-purge-btn";
                 blockToggleBtn.style.background = "#e11d48";
-                blockToggleBtn.innerText = "🚫 Block Profile Node";
+                blockToggleBtn.innerText = "🚫 Block Profile";
                 blockToggleBtn.onclick = () => executeBlockProfileTransaction(target);
                 buttonSlot.appendChild(blockToggleBtn);
 
@@ -1230,7 +1274,6 @@
             document.getElementById('label-profile-following-count').innerText = `${contextData.following ? contextData.following.length : 0} Following`;
             document.getElementById('label-profile-country').innerText = contextData.country || 'Global';
             
-            // Map calculated algorithms ranks onto screen objects
             document.getElementById('label-profile-weekly-rank').innerText = contextData.currentWeeklyRank || 'Unranked';
             document.getElementById('label-profile-highest-rank').innerText = contextData.highestWeeklyRank || 'Unranked';
 
@@ -1288,6 +1331,11 @@
             
             const targetRow = document.getElementById(`dm-row-${activeChatPartner}`);
             if (targetRow) targetRow.classList.add('active');
+
+            // MESSAGING CHAT WINDOW PROFILE INTERACTIVE ACTION ATTACHMENT
+            const channelHeader = document.getElementById('dm-active-channel-header');
+            channelHeader.innerHTML = `Viewing Channel: <span style="text-decoration:underline; cursor:pointer; color:var(--system-blue);" onclick="viewProfileContext('${activeChatPartner}')">@${activeChatPartner}</span>`;
+            channelHeader.style.display = "block";
 
             if(activeChatInterval) clearInterval(activeChatInterval);
             pollConversationMessages();
