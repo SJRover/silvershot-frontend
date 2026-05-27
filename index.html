@@ -41,7 +41,7 @@
         .nav-button.active { color: #0f172a; background: white; box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
         .resource-indicator-pill { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; display: flex; gap: 8px; }
 
-        /* LIVE NOTIFICATIONS DROPDOWN MODULE BOX */
+        /* LIVE NOTIFICATIONS DROPDOWN CONTAINER GRAPHICS */
         .notif-wrapper { position: relative; display: inline-block; }
         .notif-trigger-badge { background: #ef4444; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 8px; position: absolute; top: -4px; right: -2px; font-weight: 800; }
         .notif-dropdown-pane { display: none; position: absolute; right: 0; top: 45px; width: 340px; background: white; border-radius: 16px; border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 5000; overflow: hidden; color: var(--dark-slate); }
@@ -62,6 +62,7 @@
         .feed-stream-column { display: flex; flex-direction: column; gap: 24px; max-width: 650px; }
 
         .post-card { background: white; border-radius: 20px; border: 1px solid var(--card-border); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 20px; position: relative; }
+        .post-card:hover { transform: translateY(-2px); transition: transform 0.2s; }
         .post-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
         .post-header-left { display: flex; align-items: center; gap: 12px; }
         
@@ -301,8 +302,6 @@
                             <input type="file" id="form-field-avatar" accept="image/*" onchange="readLocalAvatarAsset()">
                             <div class="upload-preview-frame" id="avatar-preview-frame" style="height:80px; width:80px; border-radius:50%; margin-bottom:15px; border:2px solid #cbd5e1; background-size:cover; background-position:center;"></div>
 
-                            <div style="display:none;" id="form-field-avatar-hidden"></div>
-
                             <label>Display Name</label>
                             <input type="text" id="form-field-fullname-input">
                             <label>Biography Summary</label>
@@ -341,8 +340,8 @@
     </div>
 
     <script>
-        // REDIRECT TARGET POINTING TO THE RUNNING RENDER HOST
-        const API_BASE_URL = "https://silvershot-backend.onrender.com";
+        // FIXED ENDPOINT ASSIGNMENT POINTING UNIFORMLY TO THE WORKING BACKEND CLUSTER
+        const API_BASE_URL = "https://silvershot-service-module.onrender.com";
 
         let sessionState = null;
         let systemFeedOrderingMode = "fyp";
@@ -371,7 +370,6 @@
                 }
             }
 
-            // Global event interceptor to close notifications dropdown pane on body clicks
             document.body.addEventListener('click', function() {
                 const pane = document.getElementById('notif-dropdown-box');
                 if (pane) pane.classList.remove('visible');
@@ -390,7 +388,6 @@
             backgroundNotifLoopInstance = setInterval(pollNotificationsMetricStream, 12000);
         }
 
-        // BACKGROUND POLLING FUNCTION FOR USER ALERTS
         async function pollNotificationsMetricStream() {
             if (!sessionState) return;
             try {
@@ -921,7 +918,6 @@
                 contextData = sessionState;
                 document.getElementById('profile-edit-management-box').style.display = 'block';
                 
-                // Clear any pending state
                 pendingAvatarBase64 = null;
                 document.getElementById('form-field-fullname-input').value = contextData.fullName || '';
                 document.getElementById('form-field-bio').value = contextData.bio || '';
@@ -933,7 +929,6 @@
             } else {
                 document.getElementById('profile-edit-management-box').style.display = 'none';
                 
-                // Secure live database parameters for target profile rules
                 try {
                     const res = await fetch(`${API_BASE_URL}/api/profile/${target}`);
                     if (res.ok) {
@@ -968,7 +963,7 @@
                 };
                 buttonSlot.appendChild(followBtn);
 
-                // DYNAMIC ADAPTIVE MESSAGING PRIVACY ROUTING BUTTON ENGINE
+                // ADAPTIVE PRIVACY CONFIGURATION GATEWAY FOR PROFILE COMMUNICATION INTERFACES
                 const messageBtn = document.createElement('button');
                 const gateSetting = contextData.allowMessagesFrom || 'everyone';
                 const senderIsFollowing = contextData.followers && contextData.followers.includes(sessionState.username.toLowerCase());
@@ -1061,4 +1056,61 @@
                     const row = document.createElement('div');
                     row.className = "dm-user-row";
                     row.id = `dm-row-${user.toLowerCase()}`;
-                    row.
+                    row.innerText = '@' + user;
+                    row.onclick = () => launchActiveChatThreadChannel(user);
+                    baseNode.appendChild(row);
+                });
+            } else { baseNode.innerHTML += '<p style="font-size:0.8rem; color:var(--steel-gray); font-style:italic;">No connections found.</p>'; }
+        }
+
+        function launchActiveChatThreadChannel(username) {
+            activeChatPartner = username.toLowerCase();
+            document.querySelectorAll('.dm-user-row').forEach(r => r.classList.remove('active'));
+            
+            const targetRow = document.getElementById(`dm-row-${activeChatPartner}`);
+            if (targetRow) targetRow.classList.add('active');
+
+            if(activeChatInterval) clearInterval(activeChatInterval);
+            pollConversationMessages();
+            activeChatInterval = setInterval(pollConversationMessages, 3000);
+        }
+
+        async function pollConversationMessages() {
+            if(!activeChatPartner) return;
+            const scrollBox = document.getElementById('chat-conversation-scroll-node');
+            const res = await fetch(`${API_BASE_URL}/api/messages/thread/${sessionState.username}/${activeChatPartner}`);
+            const logs = await res.json();
+
+            scrollBox.innerHTML = '';
+            logs.forEach(msg => {
+                const item = document.createElement('div');
+                const flowDir = msg.sender.toLowerCase() === sessionState.username.toLowerCase() ? 'sent' : 'received';
+                item.className = `chat-bubble ${flowDir}`;
+                item.innerText = msg.text;
+                scrollBox.appendChild(item);
+            });
+            scrollBox.scrollTop = scrollBox.scrollHeight;
+        }
+
+        async function dispatchDirectMessageToServer() {
+            const text = document.getElementById('dm-message-input-text').value;
+            if(!text.trim() || !activeChatPartner) return;
+
+            const res = await fetch(`${API_BASE_URL}/api/messages/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: sessionState.username, receiver: activeChatPartner, text })
+            });
+            
+            if (!res.ok) {
+                const data = await res.json();
+                alert(data.error || "Message delivery failed due to relationship locks.");
+                return;
+            }
+
+            document.getElementById('dm-message-input-text').value = '';
+            pollConversationMessages();
+        }
+    </script>
+</body>
+</html>
