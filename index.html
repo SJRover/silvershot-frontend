@@ -15,20 +15,37 @@
             --card-border: rgba(15, 23, 42, 0.08);
             --system-blue: #2563eb;
             --modal-bg: rgba(15, 23, 42, 0.85);
+            --card-background: #ffffff;
+            --text-color-primary: #0f172a;
+        }
+
+        /* LIVE DARK COLOUR MODE OVERRIDES STYLE CLASSES */
+        body.dark-theme-active {
+            --silver-shine: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            --metallic-bg: #0f172a;
+            --dark-slate: #f8fafc;
+            --steel-gray: #94a3b8;
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-background: #1e293b;
+            --text-color-primary: #f8fafc;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: var(--silver-shine); background-attachment: fixed; color: var(--dark-slate); min-height: 100vh; padding-bottom: 60px; }
+        body { background: var(--silver-shine); background-attachment: fixed; color: var(--text-color-primary); min-height: 100vh; padding-bottom: 60px; transition: background 0.3s, color 0.3s; }
         
-        /* EXPANDED TOTAL INTERFACE MAX-WIDTH BOUNDS */
+        /* EXPANDED CONTAINER REAL ESTATE LAYOUT */
         .desktop-container { max-width: 1350px; margin: 0 auto; padding: 0 20px; }
 
         .auth-gateway-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .auth-portal-card { background: white; width: 100%; max-width: 450px; border-radius: 24px; padding: 40px; border: 1px solid var(--card-border); box-shadow: 0 20px 40px rgba(15,23,42,0.06); text-align: center; }
+        .auth-portal-card { background: var(--card-background); width: 100%; max-width: 450px; border-radius: 24px; padding: 40px; border: 1px solid var(--card-border); box-shadow: 0 20px 40px rgba(15,23,42,0.06); text-align: center; }
         .auth-tabs { display: flex; gap: 10px; margin-bottom: 25px; background: #f1f5f9; padding: 6px; border-radius: 12px; }
         
+        body.dark-theme-active .auth-tabs { background: #0f172a; }
+
         .auth-tab-btn { flex: 1; padding: 10px; background: none; border: none; font-weight: 700; font-size: 0.9rem; color: var(--steel-gray); cursor: pointer; border-radius: 8px; }
-        .auth-tab-btn.active { background: white; color: var(--dark-slate); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+        .auth-tab-btn.active { background: white; color: #0f172a; box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+        body.dark-theme-active .auth-tab-btn.active { background: #1e293b; color: white; }
+
         .auth-form-view { display: none; text-align: left; }
         .auth-form-view.active { display: block; }
 
@@ -45,101 +62,112 @@
 
         .notif-wrapper { position: relative; display: inline-block; }
         .notif-trigger-badge { background: #ef4444; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 8px; position: absolute; top: -4px; right: -2px; font-weight: 800; }
-        .notif-dropdown-pane { display: none; position: absolute; right: 0; top: 45px; width: 340px; background: white; border-radius: 16px; border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 5000; overflow: hidden; color: var(--dark-slate); }
+        .notif-dropdown-pane { display: none; position: absolute; right: 0; top: 45px; width: 340px; background: var(--card-background); border-radius: 16px; border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 5000; overflow: hidden; color: var(--text-color-primary); }
         .notif-dropdown-pane.visible { display: block; }
-        .notif-header { padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--steel-gray); }
+        .notif-header { padding: 12px 16px; background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--card-border); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--steel-gray); }
         .notif-list-scroll { max-height: 320px; overflow-y: auto; }
-        .notif-item-row { padding: 12px 16px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; line-height: 1.4; transition: background 0.1s; }
-        .notif-item-row:hover { background: #f8fafc; }
+        .notif-item-row { padding: 12px 16px; border-bottom: 1px solid var(--card-border); font-size: 0.85rem; line-height: 1.4; transition: background 0.1s; }
+        .notif-item-row:hover { background: rgba(0,0,0,0.04); }
         .notif-time-stamp { font-size: 0.7rem; color: #94a3b8; margin-top: 4px; font-weight: 600; }
 
         .view-panel { display: none; width: 100%; }
         .view-panel.active { display: block; }
 
-        /* WIDENED GRID LAYOUT DESIGN ADJUSTMENTS */
         .feed-layout-grid { display: grid; grid-template-columns: 260px 1fr; gap: 35px; align-items: start; }
-        .feed-tabs-sidebar { background: rgba(255,255,255,0.8); border: 1px solid var(--card-border); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .feed-selector-btn { width: 100%; text-align: left; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; color: var(--steel-gray); }
-        .feed-selector-btn.active { background: var(--dark-slate); color: white; border-color: var(--dark-slate); }
-        
-        /* POST CARD EXPANSION FOR FULL SPACE UTILIZATION */
+        .feed-tabs-sidebar { background: var(--card-background); border: 1px solid var(--card-border); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .feed-selector-btn { width: 100%; text-align: left; padding: 12px; background: var(--card-background); border: 1px solid var(--card-border); border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; color: var(--steel-gray); }
+        .feed-selector-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+        body.dark-theme-active .feed-selector-btn.active { background: #f8fafc; color: #0f172a; border-color: #f8fafc; }
+
+        /* POST WIDTH ALLOCATION OPTIMIZATION */
         .feed-stream-column { display: flex; flex-direction: column; gap: 24px; width: 100%; max-width: 950px; }
 
-        .post-card { background: white; border-radius: 20px; border: 1px solid var(--card-border); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 20px; position: relative; }
-        .post-card:hover { transform: translateY(-2px); transition: transform 0.2s; }
+        .post-card { background: var(--card-background); border-radius: 20px; border: 1px solid var(--card-border); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 20px; position: relative; }
         .post-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
         .post-header-left { display: flex; align-items: center; gap: 12px; }
         
         .avatar-clickable { width: 42px; height: 42px; border-radius: 50%; background: var(--steel-gray); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; background-size: cover; background-position: center; cursor: pointer; }
-        .user-info-text h5 { font-size: 1rem; font-weight: 700; cursor: pointer; }
+        .user-info-text h5 { font-size: 1rem; font-weight: 700; cursor: pointer; color: var(--text-color-primary); }
         .user-info-text h5:hover { text-decoration: underline; }
         .user-info-text h6 { font-size: 0.8rem; color: var(--steel-gray); font-weight: 500; }
         
         .post-meta-right-tray { display: flex; align-items: center; gap: 10px; }
-        .post-lifespan-badge { background: #f1f5f9; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; color: var(--steel-gray); }
-        
+        .post-lifespan-badge { background: rgba(0,0,0,0.05); font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; color: var(--steel-gray); }
+        body.dark-theme-active .post-lifespan-badge { background: rgba(255,255,255,0.05); }
+
         .admin-danger-purge-btn { background: #ef4444; border: none; color: white; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; cursor: pointer; transition: background 0.15s; }
         .admin-danger-purge-btn:hover { background: #dc2626; }
 
-        /* INCREASED TIMELINE POST VISUAL PORT SIZE */
-        .image-display-area { width: 100%; height: 500px; border-radius: 12px; background-size: cover; background-position: center; background-color: #cbd5e1; margin-bottom: 16px; transition: all 0.2s; }
+        /* REDUCED DISPLAY CARD FRAME PORT HEIGHT FOR STREAM BALANCING */
+        .image-display-area { width: 100%; height: 440px; border-radius: 12px; background-size: cover; background-position: center; background-color: #cbd5e1; margin-bottom: 16px; cursor: pointer; }
         .tag-pill-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-        .tag-pill { font-size: 0.75rem; background: #e2e8f0; padding: 4px 10px; border-radius: 12px; color: var(--dark-slate); font-weight: 600; }
+        .tag-pill { font-size: 0.75rem; background: rgba(0,0,0,0.05); padding: 4px 10px; border-radius: 12px; color: var(--text-color-primary); font-weight: 600; }
+        body.dark-theme-active .tag-pill { background: rgba(255,255,255,0.05); }
         .caption-text-block { font-size: 1rem; line-height: 1.5; margin-bottom: 16px; }
 
-        .reaction-toolbar-tray { display: flex; gap: 10px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
-        .reaction-node-trigger { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; color: var(--steel-gray); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
-        .reaction-node-trigger:hover { background: #e2e8f0; color: var(--dark-slate); }
+        .reaction-toolbar-tray { display: flex; gap: 10px; padding-top: 12px; border-top: 1px solid var(--card-border); }
+        .reaction-node-trigger { background: rgba(0,0,0,0.04); border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; color: var(--steel-gray); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
+        body.dark-theme-active .reaction-node-trigger { background: rgba(255,255,255,0.04); }
+        .reaction-node-trigger:hover { background: rgba(0,0,0,0.08); color: var(--dark-slate); }
         .reaction-node-trigger.active-liked { background: #fee2e2; color: #ef4444; }
         .reaction-node-trigger.active-medaled { background: #fef9c3; color: #ca8a04; }
         .reaction-node-trigger.active-broccolied { background: #dcfce7; color: #16a34a; }
 
-        .crop-workbench-frame { width: 100%; max-height: 450px; background: #e2e8f0; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; border: 2px dashed #cbd5e1; }
-        .crop-source-element { max-width: 100%; max-height: 450px; display: none; }
+        .crop-workbench-frame { width: 100%; height: 350px; background: rgba(0,0,0,0.05); border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; border: 2px dashed var(--steel-gray); }
+        .crop-source-element { max-width: 100%; max-height: 350px; display: none; }
         .ratio-control-row { display: flex; gap: 8px; margin-bottom: 20px; }
-        .ratio-btn { flex: 1; padding: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--steel-gray); cursor: pointer; }
-        .ratio-btn.active-ratio { background: var(--dark-slate); color: white; border-color: var(--dark-slate); }
+        .ratio-btn { flex: 1; padding: 8px; background: rgba(0,0,0,0.04); border: 1px solid var(--card-border); border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--steel-gray); cursor: pointer; }
+        .ratio-btn.active-ratio { background: #0f172a; color: white; }
 
-        .form-layout-box { background: white; border-radius: 24px; border: 1px solid var(--card-border); padding: 40px; max-width: 950px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .form-layout-box { background: var(--card-background); border-radius: 24px; border: 1px solid var(--card-border); padding: 40px; max-width: 950px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
         label { font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; display: block; color: var(--steel-gray); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        input[type="text"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 12px 16px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; font-size: 0.95rem; outline: none; }
-        .action-submit-trigger { width: 100%; padding: 14px; background: var(--dark-slate); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+        input[type="text"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 12px 16px; margin-bottom: 20px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--card-background); color: var(--text-color-primary); font-size: 0.95rem; outline: none; }
+        .action-submit-trigger { width: 100%; padding: 14px; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+        body.dark-theme-active .action-submit-trigger { background: #f8fafc; color: #0f172a; }
         .alert-banner-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 15px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; }
+        body.dark-theme-active .alert-banner-info { background: #1e293b; color: #94a3b8; border-color: var(--card-border); }
         .character-indicator { text-align: right; font-size: 0.8rem; color: var(--steel-gray); margin-top: -15px; margin-bottom: 20px; }
 
         .profile-layout-grid { display: grid; grid-template-columns: 400px 1fr; gap: 40px; align-items: start; }
-        .profile-sidecard { background: white; padding: 30px; border-radius: 24px; border: 1px solid var(--card-border); text-align: center; }
+        .profile-sidecard { background: var(--card-background); padding: 30px; border-radius: 24px; border: 1px solid var(--card-border); text-align: center; }
         
-        .large-profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--dark-slate); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: 0 auto 15px auto; border: 4px solid #f1f5f9; background-size: cover; background-position: center; }
+        .large-profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: 0 auto 15px auto; border: 4px solid var(--card-border); background-size: cover; background-position: center; }
         .profile-badge-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 15px 0; }
-        .badge-pill { font-size: 0.75rem; font-weight: 600; background: #f1f5f9; padding: 6px 12px; border-radius: 20px; color: var(--steel-gray); }
+        .badge-pill { font-size: 0.75rem; font-weight: 600; background: rgba(0,0,0,0.05); padding: 6px 12px; border-radius: 20px; color: var(--steel-gray); }
+        body.dark-theme-active .badge-pill { background: rgba(255,255,255,0.05); }
         .hall-of-fame-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
         
         .hall-of-fame-slot { background: #e2e8f0; aspect-ratio: 3/4; border-radius: 12px; overflow: hidden; position: relative; background-size: cover; background-position: center; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.02); cursor: pointer; }
         .hall-of-fame-badge { position: absolute; bottom: 6px; left: 6px; right: 6px; background: rgba(15,23,42,0.85); color: white; font-size: 0.7rem; text-align: center; padding: 4px 0; border-radius: 6px; }
         .hall-slot-vacant { display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; border: 2px dashed #cbd5e1; background: rgba(255,255,255,0.5); }
 
-        .messaging-layout-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; background: white; border-radius: 24px; border: 1px solid var(--card-border); min-height: 550px; overflow: hidden; }
-        .dm-sidebar-list { background: #f8fafc; border-right: 1px solid #e2e8f0; padding: 15px; display: flex; flex-direction: column; gap: 8px; }
-        .dm-user-row { padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-        .dm-user-row.active { background: var(--dark-slate); color: white; border-color: var(--dark-slate); }
+        .messaging-layout-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; background: var(--card-background); border-radius: 24px; border: 1px solid var(--card-border); min-height: 550px; overflow: hidden; }
+        .dm-sidebar-list { background: rgba(0,0,0,0.02); border-right: 1px solid var(--card-border); padding: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .dm-user-row { padding: 12px; background: var(--card-background); border: 1px solid var(--card-border); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+        .dm-user-row.active { background: #0f172a; color: white; }
+        body.dark-theme-active .dm-user-row.active { background: #f8fafc; color: #0f172a; }
         .dm-chat-window { display: flex; flex-direction: column; height: 100%; }
-        .dm-messages-scroll { flex-grow: 1; padding: 20px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; gap: 12px; max-height: 420px; }
+        .dm-messages-scroll { flex-grow: 1; padding: 20px; overflow-y: auto; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; gap: 12px; max-height: 420px; }
         
         .chat-bubble { max-width: 70%; padding: 10px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; }
-        .chat-bubble.sent { background: var(--dark-slate); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chat-bubble.received { background: #e2e8f0; color: var(--dark-slate); align-self: flex-start; border-bottom-left-radius: 4px; }
+        .chat-bubble.sent { background: #0f172a; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        body.dark-theme-active .chat-bubble.sent { background: #f8fafc; color: #0f172a; }
+        .chat-bubble.received { background: #e2e8f0; color: #0f172a; align-self: flex-start; border-bottom-left-radius: 4px; }
+        body.dark-theme-active .chat-bubble.received { background: #1e293b; color: white; }
         
-        .dm-input-tray { padding: 15px; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; background: white; }
+        .dm-input-tray { padding: 15px; border-top: 1px solid var(--card-border); display: flex; gap: 10px; background: var(--card-background); }
         .dm-input-tray input { margin-bottom: 0; }
-        .dm-send-btn { background: var(--dark-slate); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .dm-send-btn { background: #0f172a; color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        body.dark-theme-active .dm-send-btn { background: #f8fafc; color: #0f172a; }
 
-        .search-result-profile-card { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; background: #f8fafc; }
+        .search-result-profile-card { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border: 1px solid var(--card-border); border-radius: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.01); }
 
         .lightbox-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--modal-bg); z-index: 2000; justify-content: center; align-items: center; padding: 40px; backdrop-filter: blur(8px); }
-        .lightbox-content { background: white; width: 100%; max-width: 600px; border-radius: 24px; padding: 24px; position: relative; }
+        .lightbox-content { background: var(--card-background); width: 100%; max-width: 650px; border-radius: 24px; padding: 24px; position: relative; color: var(--text-color-primary); }
         .close-lightbox { position: absolute; top: -45px; right: 0; background: none; border: none; color: white; font-size: 2rem; cursor: pointer; }
+
+        .toggle-setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 8px 0; border-bottom: 1px dashed var(--card-border); }
     </style>
 </head>
 <body>
@@ -217,14 +245,17 @@
 
             <div id="view-panel-search" class="view-panel">
                 <div class="form-layout-box">
-                    <h3>Search Network</h3>
+                    <h3>Explore Platform</h3>
+                    
+                    <button class="action-submit-trigger" style="background:#2563eb; color:white; margin:15px 0 25px 0;" onclick="fetchAndDisplayWeeklyLeaderboard()">🏆 View Top 25 Weekly Accounts</button>
+
                     <form onsubmit="event.preventDefault(); executeWeightedSearchQuery();">
                         <input type="text" id="network-query-input" placeholder="Type search profile or hashtag...">
                         <button type="submit" class="action-submit-trigger" style="padding:10px; margin-bottom:20px;">Search</button>
                     </form>
                     
                     <div style="margin-top:20px;">
-                        <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:12px;">Matched Users</h4>
+                        <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:12px;" id="search-creators-header-title">Matched Users</h4>
                         <div id="search-users-injection-node"></div>
                     </div>
                     <div style="margin-top:30px;">
@@ -267,7 +298,7 @@
                     <textarea id="input-graphic-caption" placeholder="Describe the post... Include #Tags" maxlength="300" rows="4" oninput="monitorTextLength()"></textarea>
                     <div class="character-indicator" id="text-length-indicator">0 / 300 Characters</div>
 
-                    <button class="action-submit-trigger" onclick="dispatchImageUploadToServer()">Simply Upload</button>
+                    <button class="action-submit-trigger" onclick="dispatchImageUploadToServer()">Upload</button>
                 </div>
             </div>
 
@@ -292,6 +323,12 @@
                         <div class="large-profile-avatar" id="label-avatar-symbol">C</div>
                         <h3 id="label-profile-fullname">User Profile</h3>
                         <h5 id="label-profile-handle" style="color:var(--steel-gray); font-weight:500; margin-bottom:10px;">@handle</h5>
+                        
+                        <div style="margin:10px 0; background:rgba(0,0,0,0.03); padding:10px; border-radius:12px; font-size:0.85rem; text-align:left;" id="ranking-box-container">
+                            <div style="margin-bottom:4px;">🏆 <strong>Weekly Rank:</strong> <span id="label-profile-weekly-rank">Unranked</span></div>
+                            <div>🚀 <strong>All-Time Best Rank:</strong> <span id="label-profile-highest-rank">Unranked</span></div>
+                        </div>
+
                         <p class="bio" id="label-profile-bio">Bio description text row layout.</p>
                         
                         <div class="profile-badge-row">
@@ -303,7 +340,17 @@
 
                         <div class="edit-form-box" id="profile-edit-management-box" style="margin-top:25px; border-top:1px solid #e2e8f0; padding-top:20px; text-align:left;">
                             <h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; color:var(--steel-gray);">Account Settings</h4>
-                            <label>Profile Picture</label>
+                            
+                            <div class="toggle-setting-row">
+                                <span>Dark Colour Mode</span>
+                                <input type="checkbox" id="form-field-dark-toggle" onchange="executeClientThemeSwitch()">
+                            </div>
+                            <div class="toggle-setting-row">
+                                <span>PG Filter Content</span>
+                                <input type="checkbox" id="form-field-pg-toggle">
+                            </div>
+
+                            <label style="margin-top:15px;">Profile Picture</label>
                             <input type="file" id="form-field-avatar" accept="image/*" onchange="readLocalAvatarAsset()">
                             <div class="upload-preview-frame" id="avatar-preview-frame" style="height:80px; width:80px; border-radius:50%; margin-bottom:15px; border:2px solid #cbd5e1; background-size:cover; background-position:center;"></div>
 
@@ -323,7 +370,19 @@
                                 <option value="following">Allow From Following</option>
                                 <option value="none">Block Messages</option>
                             </select>
-                            <button class="action-submit-trigger" style="padding:10px; font-size:0.85rem;" onclick="dispatchProfileUpdatesToServer()">Save Settings</button>
+                            <button class="action-submit-trigger" style="padding:10px; font-size:0.85rem; margin-bottom:20px;" onclick="dispatchProfileUpdatesToServer()">Save Settings</button>
+
+                            <div style="margin-top:15px; border-top:1px solid var(--card-border); padding-top:15px;">
+                                <h5 style="font-size:0.8rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px;">Blocked Profiles</h5>
+                                <div id="blocked-users-list-container" style="max-height:120px; overflow-y:auto; font-size:0.85rem;"></div>
+                            </div>
+
+                            <div style="margin-top:20px; border-top:1px solid #ef4444; padding-top:15px; background:rgba(239,68,68,0.05); padding:10px; border-radius:12px;">
+                                <h5 style="color:#ef4444; font-size:0.8rem; text-transform:uppercase; margin-bottom:10px;">Permanently Delete Account</h5>
+                                <input type="password" id="delete-account-password-confirm" placeholder="Enter password to confirm...">
+                                <button class="admin-danger-purge-btn" style="width:100%; padding:10px;" onclick="executeAutonomousAccountErasure()">Wipe My Entire History</button>
+                            </div>
+
                         </div>
                     </div>
                     <div>
@@ -366,6 +425,12 @@
                     sessionState = JSON.parse(cachedTokenData);
                     document.getElementById('application-auth-gateway').style.display = 'none';
                     document.getElementById('main-application-dashboard').style.display = 'block';
+                    
+                    // Restore custom colour theme settings safely upon initialization
+                    if (sessionState.darkMode) {
+                        document.body.classList.add('dark-theme-active');
+                    }
+
                     navigateToPanel('feed');
                     initializeGlobalClocksDaemon();
                     startNotificationTrackingLoop();
@@ -379,6 +444,15 @@
                 if (pane) pane.classList.remove('visible');
             });
         };
+
+        function executeClientThemeSwitch() {
+            const activeCheckbox = document.getElementById('form-field-dark-toggle').checked;
+            if (activeCheckbox) {
+                document.body.classList.add('dark-theme-active');
+            } else {
+                document.body.classList.remove('dark-theme-active');
+            }
+        }
 
         function initializeGlobalClocksDaemon() {
             if(globalClockDaemonInstance) clearInterval(globalClockDaemonInstance);
@@ -511,6 +585,87 @@
             } else { alert("Failed to execute account deletion operation."); }
         }
 
+        async function executeAutonomousAccountErasure() {
+            const pass = document.getElementById('delete-account-password-confirm').value;
+            if (!pass) { alert("Type your password to verify the account removal action."); return; }
+            if (!confirm("CRITICAL PROTOCOL: Are you completely certain you want to wipe out your entire account profile? Present action is irreversible.")) return;
+
+            const res = await fetch(`${API_BASE_URL}/api/profile/delete-account`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: sessionState.username, password: pass })
+            });
+            const responseData = await res.json();
+            if (res.ok) {
+                alert(responseData.message);
+                executePlatformLogout();
+            } else {
+                alert(responseData.error);
+            }
+        }
+
+        async function executeBlockProfileTransaction(targetUsername) {
+            if (!confirm(`Block all communications and timeline items from @${targetUsername}?`)) return;
+            const res = await fetch(`${API_BASE_URL}/api/relations/block`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: sessionState.username, targetUsername })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                sessionState.blockedUsers = data.blockedUsers;
+                localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
+                alert(data.message);
+                navigateToPanel('feed');
+            }
+        }
+
+        async function executeUnblockProfileTransaction(targetUsername) {
+            const res = await fetch(`${API_BASE_URL}/api/relations/unblock`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: sessionState.username, targetUsername })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                sessionState.blockedUsers = data.blockedUsers;
+                localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
+                alert(data.message);
+                viewProfileContext('self');
+            }
+        }
+
+        async function fetchAndDisplayWeeklyLeaderboard() {
+            const profilesSlot = document.getElementById('search-users-injection-node');
+            const streamSlot = document.getElementById('search-posts-injection-node');
+            document.getElementById('search-creators-header-title').innerText = "Top 25 Global Creators This Week";
+
+            streamSlot.innerHTML = '';
+            profilesSlot.innerHTML = '<p style="color:var(--steel-gray);">Compiling global points matrix indexes...</p>';
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/ranking/leaderboard`);
+                const rankList = await res.json();
+                profilesSlot.innerHTML = '';
+
+                rankList.forEach((u, pos) => {
+                    const row = document.createElement('div');
+                    row.className = "search-result-profile-card";
+                    row.style.borderLeft = "4px solid var(--system-blue)";
+                    row.innerHTML = `
+                        <div>
+                            <strong>#${pos+1} ${u.fullName}</strong>
+                            <p style="font-size:0.8rem; color:var(--steel-gray);">@${u.username} • Score: ${u.weeklyScore} Points (${u.currentWeeklyRank} globally)</p>
+                        </div>
+                        <button class="nav-button active" style="padding:6px 12px; font-size:0.75rem;" onclick="viewProfileContext('${u.username}')">View Profile</button>
+                    `;
+                    profilesSlot.appendChild(row);
+                });
+            } catch (err) {
+                profilesSlot.innerHTML = '<p style="color:#ef4444;">Failed to load leaderboard database query records.</p>';
+            }
+        }
+
         function toggleAuthMode(target) {
             document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.auth-form-view').forEach(v => v.classList.remove('active'));
@@ -549,6 +704,8 @@
             document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active-ratio'));
             document.getElementById('ratio-btn-' + btnId).classList.add('active-ratio');
         }
+
+        document.getElementById('form-view-signin').parentNode.style.display = 'block';
 
         function executeCanvasCropAlgorithm() {
             const sourceImg = document.getElementById('crop-source-buffer');
@@ -685,6 +842,13 @@
                 localStorage.setItem('silvershot_session_node', JSON.stringify(data));
                 document.getElementById('application-auth-gateway').style.display = 'none';
                 document.getElementById('main-application-dashboard').style.display = 'block';
+                
+                if (sessionState.darkMode) {
+                    document.body.classList.add('dark-theme-active');
+                } else {
+                    document.body.classList.remove('dark-theme-active');
+                }
+
                 navigateToPanel('feed');
                 initializeGlobalClocksDaemon();
                 startNotificationTrackingLoop();
@@ -697,6 +861,7 @@
             if(activeChatInterval) clearInterval(activeChatInterval);
             if(globalClockDaemonInstance) clearInterval(globalClockDaemonInstance);
             if(backgroundNotifLoopInstance) clearInterval(backgroundNotifLoopInstance);
+            document.body.classList.remove('dark-theme-active');
             document.getElementById('main-application-dashboard').style.display = 'none';
             document.getElementById('application-auth-gateway').style.display = 'flex';
         }
@@ -741,9 +906,10 @@
 
                 let adminControlMarkup = '';
                 if(sessionState.isAdmin) {
-                    adminControlMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Delete Post (Admin)</button>`;
+                    adminControlMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑| Delete Post (Admin)</button>`;
                 }
 
+                // LIGHTBOX INTEGRATION ADDED ON CLICK AT DISPLAY AREA
                 card.innerHTML = `
                     <div class="post-header">
                         <div class="post-header-left">
@@ -755,12 +921,13 @@
                         </div>
                         <div class="post-meta-right-tray">
                             ${adminControlMarkup}
+                            <button class="nav-button" style="padding:4px 8px; font-size:0.75rem; background:rgba(0,0,0,0.05);" onclick="event.stopPropagation(); executeBlockProfileTransaction('${post.username}')">🚫 Block</button>
                             <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">
                                 ${calculateTimeRemainingText(post.createdAt)}
                             </div>
                         </div>
                     </div>
-                    <div class="image-display-area" style="background-image:url('${post.img}')"></div>
+                    <div class="image-display-area" style="background-image:url('${post.img}')" onclick="triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')})"></div>
                     <div class="tag-pill-container">${tagsMarkup}</div>
                     <div class="caption-text-block">${post.caption}</div>
                     ${generateReactionToolbar(post)}
@@ -808,6 +975,7 @@
             const stringToken = document.getElementById('network-query-input').value.trim();
             const profilesSlot = document.getElementById('search-users-injection-node');
             const streamSlot = document.getElementById('search-posts-injection-node');
+            document.getElementById('search-creators-header-title').innerText = "Matched Users";
             
             if(!stringToken) { profilesSlot.innerHTML = ''; streamSlot.innerHTML = ''; return; }
 
@@ -839,7 +1007,7 @@
 
                 let postAdminMarkup = '';
                 if(sessionState.isAdmin) {
-                    postAdminMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Delete Post (Admin)</button>`;
+                    postAdminMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑| Delete Post (Admin)</button>`;
                 }
 
                 container.innerHTML = `
@@ -853,7 +1021,7 @@
                             <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">${calculateTimeRemainingText(post.createdAt)}</div>
                         </div>
                     </div>
-                    <div class="image-display-area" style="background-image:url('${post.img}'); height:260px;"></div>
+                    <div class="image-display-area" style="background-image:url('${post.img}'); height:260px;" onclick="triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')})"></div>
                     <div class="tag-pill-container">${elements}</div>
                     <div class="caption-text-block">${post.caption}</div>
                     ${generateReactionToolbar(post)}
@@ -867,12 +1035,14 @@
             const bio = document.getElementById('form-field-bio').value;
             const isPrivate = document.getElementById('form-field-privacy').value === 'private';
             const allowMessagesFrom = document.getElementById('form-field-dm-gate').value;
+            const pgFriendly = document.getElementById('form-field-pg-toggle').checked;
+            const darkMode = document.getElementById('form-field-dark-toggle').checked;
 
             const res = await fetch(`${API_BASE_URL}/api/profile/update`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    username: sessionState.username, fullName, bio, isPrivate, allowMessagesFrom,
+                    username: sessionState.username, fullName, bio, isPrivate, allowMessagesFrom, pgFriendly, darkMode,
                     avatarString: pendingAvatarBase64 || sessionState.avatarString,
                     age: sessionState.age, status: sessionState.status, country: sessionState.country, hideFollowersList: sessionState.hideFollowersList
                 })
@@ -884,6 +1054,8 @@
                 sessionState.isPrivate = data.user.isPrivate;
                 sessionState.allowMessagesFrom = data.user.allowMessagesFrom;
                 sessionState.avatarString = data.user.avatarString;
+                sessionState.pgFriendly = data.user.pgFriendly;
+                sessionState.darkMode = data.user.darkMode;
                 localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
                 alert("Profile updates saved.");
                 viewProfileContext('self');
@@ -897,7 +1069,7 @@
             }
 
             document.getElementById('lightbox-post-render-area').innerHTML = `
-                <div class="post-card" style="box-shadow:none; border:none; padding:0; margin-bottom:0;">
+                <div class="post-card" style="box-shadow:none; border:none; padding:0; margin-bottom:0; background:transparent;">
                     <div class="post-header">
                         <div class="user-info-text">
                             <h5>${item.fullName}</h5>
@@ -905,9 +1077,9 @@
                         </div>
                         <div class="post-lifespan-badge">${item.createdAt ? calculateTimeRemainingText(item.createdAt) : 'Showcase Gallery'}</div>
                     </div>
-                    <div class="image-display-area" style="background-image:url('${item.img}'); height:420px;"></div>
+                    <div class="image-display-area" style="background-image:url('${item.img}'); height:450px; cursor:default;"></div>
                     <div class="tag-pill-container">${tagsMarkup}</div>
-                    <p class="caption-text-block">${item.caption}</p>
+                    <p class="caption-text-block" style="color:var(--text-color-primary);">${item.caption}</p>
                 </div>
             `;
             document.getElementById('global-lightbox-overlay').style.display = 'flex';
@@ -916,10 +1088,22 @@
         async function viewProfileContext(target) {
             let contextData = null;
             const buttonSlot = document.getElementById('profile-interaction-context-buttons');
+            const blockedListContainer = document.getElementById('blocked-users-list-container');
             buttonSlot.innerHTML = '';
+            blockedListContainer.innerHTML = '';
 
             if (target === 'self' || target.toLowerCase() === sessionState.username.toLowerCase()) {
-                contextData = sessionState;
+                
+                // Perform dynamic fetch verification loop for updating current scores
+                try {
+                    const res = await fetch(`${API_BASE_URL}/api/profile/${sessionState.username}`);
+                    if (res.ok) {
+                        contextData = await res.json();
+                        sessionState = contextData;
+                        localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
+                    } else { contextData = sessionState; }
+                } catch(e) { contextData = sessionState; }
+
                 document.getElementById('profile-edit-management-box').style.display = 'block';
                 
                 pendingAvatarBase64 = null;
@@ -927,9 +1111,30 @@
                 document.getElementById('form-field-bio').value = contextData.bio || '';
                 document.getElementById('form-field-privacy').value = contextData.isPrivate ? 'private' : 'public';
                 document.getElementById('form-field-dm-gate').value = contextData.allowMessagesFrom || 'everyone';
+                document.getElementById('form-field-pg-toggle').checked = contextData.pgFriendly || false;
+                document.getElementById('form-field-dark-toggle').checked = contextData.darkMode || false;
                 
                 const frame = document.getElementById('avatar-preview-frame');
                 frame.style.backgroundImage = contextData.avatarString ? `url('${contextData.avatarString}')` : 'none';
+
+                // Populate blocked users management interface blocks
+                if (contextData.blockedUsers && contextData.blockedUsers.length > 0) {
+                    contextData.blockedUsers.forEach(blockedUser => {
+                        const row = document.createElement('div');
+                        row.style.display = "flex";
+                        row.style.justifyContent = "space-between";
+                        row.style.alignItems = "center";
+                        row.style.marginBottom = "6px";
+                        row.innerHTML = `
+                            <span>@${blockedUser}</span>
+                            <button class="nav-button" style="color:var(--system-blue); padding:2px 6px; font-size:0.75rem;" onclick="executeUnblockProfileTransaction('${blockedUser}')">Unblock</button>
+                        `;
+                        blockedListContainer.appendChild(row);
+                    });
+                } else {
+                    blockedListContainer.innerHTML = '<p style="color:var(--steel-gray); font-style:italic;">No profiles blocked.</p>';
+                }
+
             } else {
                 document.getElementById('profile-edit-management-box').style.display = 'none';
                 
@@ -938,10 +1143,10 @@
                     if (res.ok) {
                         contextData = await res.json();
                     } else {
-                        contextData = { username: target, fullName: target + " Profile", bio: "User network account.", followers: [], following: [], country: "Global", hallOfFame: [], allowMessagesFrom: 'everyone' };
+                        contextData = { username: target, fullName: target + " Profile", bio: "User network account.", followers: [], following: [], country: "Global", hallOfFame: [], allowMessagesFrom: 'everyone', currentWeeklyRank: 'Unranked', highestWeeklyRank: 'Unranked' };
                     }
                 } catch (err) {
-                    contextData = { username: target, fullName: target + " Profile", bio: "User network account.", followers: [], following: [], country: "Global", hallOfFame: [], allowMessagesFrom: 'everyone' };
+                    contextData = { username: target, fullName: target + " Profile", bio: "User network account.", followers: [], following: [], country: "Global", hallOfFame: [], allowMessagesFrom: 'everyone', currentWeeklyRank: 'Unranked', highestWeeklyRank: 'Unranked' };
                 }
 
                 if(sessionState.isAdmin) {
@@ -953,6 +1158,13 @@
                     purgeBtn.onclick = () => executeAdminAccountPurge(target);
                     buttonSlot.appendChild(purgeBtn);
                 }
+
+                const blockToggleBtn = document.createElement('button');
+                blockToggleBtn.className = "admin-danger-purge-btn";
+                blockToggleBtn.style.background = "#e11d48";
+                blockToggleBtn.innerText = "🚫 Block Profile Node";
+                blockToggleBtn.onclick = () => executeBlockProfileTransaction(target);
+                buttonSlot.appendChild(blockToggleBtn);
 
                 const followBtn = document.createElement('button');
                 followBtn.className = "action-submit-trigger";
@@ -1017,6 +1229,10 @@
             document.getElementById('label-profile-followers-count').innerText = `${contextData.followers ? contextData.followers.length : 0} Followers`;
             document.getElementById('label-profile-following-count').innerText = `${contextData.following ? contextData.following.length : 0} Following`;
             document.getElementById('label-profile-country').innerText = contextData.country || 'Global';
+            
+            // Map calculated algorithms ranks onto screen objects
+            document.getElementById('label-profile-weekly-rank').innerText = contextData.currentWeeklyRank || 'Unranked';
+            document.getElementById('label-profile-highest-rank').innerText = contextData.highestWeeklyRank || 'Unranked';
 
             const galleryNode = document.getElementById('hall-of-fame-injection-slot');
             galleryNode.innerHTML = '';
