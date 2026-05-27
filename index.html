@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SilverShot | Public Decentralised Network</title>
+    <style>
+        :root {
+            --silver-shine: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+            --metallic-bg: #f8fafc;
+            --dark-slate: #0f172a;
+            --steel-gray: #475569;
+            --medal-gold: #eab308;
+            --broccoli-green: #22c55e;
+            --card-border: rgba(15, 23, 42, 0.08);
+            --system-blue: #2563eb;
+            --modal-bg: rgba(15, 23, 42, 0.85);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: var(--silver-shine); background-attachment: fixed; color: var(--dark-slate); min-height: 100vh; padding-bottom: 60px; }
+        .desktop-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .auth-gateway-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .auth-portal-card { background: white; width: 100%; max-width: 450px; border-radius: 24px; padding: 40px; border: 1px solid var(--card-border); box-shadow: 0 20px 40px rgba(15,23,42,0.06); text-align: center; }
+        .auth-tabs { display: flex; gap: 10px; margin-bottom: 25px; background: #f1f5f9; padding: 6px; border-radius: 12px; }
+        
+        .auth-tab-btn { flex: 1; padding: 10px; background: none; border: none; font-weight: 700; font-size: 0.9rem; color: var(--steel-gray); cursor: pointer; border-radius: 8px; }
+        .auth-tab-btn.active { background: white; color: var(--dark-slate); box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
+        .auth-form-view { display: none; text-align: left; }
+        .auth-form-view.active { display: block; }
+
+        #main-application-dashboard { display: none; }
+        header { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .header-grid { display: flex; justify-content: space-between; align-items: center; }
+        .brand-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(45deg, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        nav { display: flex; align-items: center; gap: 12px; }
+
+        .nav-button { background: none; border: none; color: #94a3b8; font-size: 0.95rem; font-weight: 700; cursor: pointer; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        .nav-button:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-button.active { color: #0f172a; background: white; box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
+        .resource-indicator-pill { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; display: flex; gap: 8px; }
+
+        .view-panel { display: none; width: 100%; }
+        .view-panel.active { display: block; }
+
+        .feed-layout-grid { display: grid; grid-template-columns: 250px 1fr; gap: 30px; align-items: start; }
+        .feed-tabs-sidebar { background: rgba(255,255,255,0.8); border: 1px solid var(--card-border); border-radius: 16px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .feed-selector-btn { width: 100%; text-align: left; padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; color: var(--steel-gray); }
+        .feed-selector-btn.active { background: var(--dark-slate); color: white; border-color: var(--dark-slate); }
+        .feed-stream-column { display: flex; flex-direction: column; gap: 24px; max-width: 650px; }
+
+        .post-card { background: white; border-radius: 20px; border: 1px solid var(--card-border); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 20px; position: relative; }
+        .post-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .post-header-left { display: flex; align-items: center; gap: 12px; }
+        
+        .avatar-clickable { width: 42px; height: 42px; border-radius: 50%; background: var(--steel-gray); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; background-size: cover; background-position: center; cursor: pointer; }
+        .user-info-text h5 { font-size: 1rem; font-weight: 700; cursor: pointer; }
+        .user-info-text h5:hover { text-decoration: underline; }
+        .user-info-text h6 { font-size: 0.8rem; color: var(--steel-gray); font-weight: 500; }
+        .post-lifespan-badge { background: #f1f5f9; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; color: var(--steel-gray); }
+
+        .image-display-area { width: 100%; height: 400px; border-radius: 12px; background-size: cover; background-position: center; background-color: #cbd5e1; margin-bottom: 16px; transition: all 0.2s; }
+        .tag-pill-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .tag-pill { font-size: 0.75rem; background: #e2e8f0; padding: 4px 10px; border-radius: 12px; color: var(--dark-slate); font-weight: 600; }
+        .caption-text-block { font-size: 1rem; line-height: 1.5; margin-bottom: 16px; }
+
+        .reaction-toolbar-tray { display: flex; gap: 10px; padding-top: 12px; border-top: 1px solid #e2e8f0; }
+        .reaction-node-trigger { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; color: var(--steel-gray); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
+        .reaction-node-trigger:hover { background: #e2e8f0; color: var(--dark-slate); }
+        .reaction-node-trigger.active-liked { background: #fee2e2; color: #ef4444; }
+        .reaction-node-trigger.active-medaled { background: #fef9c3; color: #ca8a04; }
+        .reaction-node-trigger.active-broccolied { background: #dcfce7; color: #16a34a; }
+
+        .crop-workbench-frame { width: 100%; max-height: 350px; background: #e2e8f0; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; border: 2px dashed #cbd5e1; }
+        .crop-source-element { max-width: 100%; max-height: 350px; display: none; }
+        .ratio-control-row { display: flex; gap: 8px; margin-bottom: 20px; }
+        .ratio-btn { flex: 1; padding: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--steel-gray); cursor: pointer; }
+        .ratio-btn.active-ratio { background: var(--dark-slate); color: white; border-color: var(--dark-slate); }
+
+        .form-layout-box { background: white; border-radius: 24px; border: 1px solid var(--card-border); padding: 40px; max-width: 700px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        label { font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; display: block; color: var(--steel-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        input[type="text"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 12px 16px; margin-bottom: 20px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; font-size: 0.95rem; outline: none; }
+        .action-submit-trigger { width: 100%; padding: 14px; background: var(--dark-slate); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+        .alert-banner-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; padding: 15px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; }
+        .character-indicator { text-align: right; font-size: 0.8rem; color: var(--steel-gray); margin-top: -15px; margin-bottom: 20px; }
+
+        .profile-layout-grid { display: grid; grid-template-columns: 400px 1fr; gap: 40px; align-items: start; }
+        .profile-sidecard { background: white; padding: 30px; border-radius: 24px; border: 1px solid var(--card-border); text-align: center; }
+        
+        .large-profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--dark-slate); color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: 0 auto 15px auto; border: 4px solid #f1f5f9; background-size: cover; background-position: center; }
+        .profile-badge-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 15px 0; }
+        .badge-pill { font-size: 0.75rem; font-weight: 600; background: #f1f5f9; padding: 6px 12px; border-radius: 20px; color: var(--steel-gray); }
+        .hall-of-fame-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 30px; }
+        
+        .hall-of-fame-slot { background: #e2e8f0; aspect-ratio: 3/4; border-radius: 12px; overflow: hidden; position: relative; background-size: cover; background-position: center; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.02); cursor: pointer; }
+        .hall-of-fame-badge { position: absolute; bottom: 6px; left: 6px; right: 6px; background: rgba(15,23,42,0.85); color: white; font-size: 0.7rem; text-align: center; padding: 4px 0; border-radius: 6px; }
+        .hall-slot-vacant { display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8; border: 2px dashed #cbd5e1; background: rgba(255,255,255,0.5); }
+
+        .messaging-layout-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; background: white; border-radius: 24px; border: 1px solid var(--card-border); min-height: 550px; overflow: hidden; }
+        .dm-sidebar-list { background: #f8fafc; border-right: 1px solid #e2e8f0; padding: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .dm-user-row { padding: 12px; background: white; border: 1px solid #e2e8f0; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+        .dm-user-row.active { background: var(--dark-slate); color: white; border-color: var(--dark-slate); }
+        .dm-chat-window { display: flex; flex-direction: column; height: 100%; }
+        .dm-messages-scroll { flex-grow: 1; padding: 20px; overflow-y: auto; background: #fafafa; display: flex; flex-direction: column; gap: 12px; max-height: 420px; }
+        
+        .chat-bubble { max-width: 70%; padding: 10px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; }
+        .chat-bubble.sent { background: var(--dark-slate); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-bubble.received { background: #e2e8f0; color: var(--dark-slate); align-self: flex-start; border-bottom-left-radius: 4px; }
+        
+        .dm-input-tray { padding: 15px; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; background: white; }
+        .dm-input-tray input { margin-bottom: 0; }
+        .dm-send-btn { background: var(--dark-slate); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        .search-result-profile-card { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; background: #f8fafc; }
+
+        .lightbox-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--modal-bg); z-index: 2000; justify-content: center; align-items: center; padding: 40px; backdrop-filter: blur(8px); }
+        .lightbox-content { background: white; width: 100%; max-width: 600px; border-radius: 24px; padding: 24px; position: relative; }
+        .close-lightbox { position: absolute; top: -45px; right: 0; background: none; border: none; color: white; font-size: 2rem; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="application-auth-gateway" class="auth-gateway-screen">
+        <div class="auth-portal-card">
+            <h2 style="font-weight:800; font-size:1.8rem; margin-bottom:20px; letter-spacing:-1px;">SilverShot Node</h2>
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-btn-signin" onclick="toggleAuthMode('signin')">Sign In</button>
+                <button class="auth-tab-btn" id="tab-btn-signup" onclick="toggleAuthMode('signup')">Register</button>
+            </div>
+            
+            <form class="auth-form-view active" id="form-view-signin" onsubmit="event.preventDefault(); executeServerLogin();">
+                <label>Handle or Email Address</label>
+                <input type="text" id="auth-signin-login" placeholder="username or email" required>
+                <label>Account Password</label>
+                <input type="password" id="auth-signin-pass" placeholder="••••••••" required>
+                <button type="submit" class="action-submit-trigger">Verify & Enter Platform</button>
+            </form>
+            
+            <form class="auth-form-view" id="form-view-signup" onsubmit="event.preventDefault(); executeServerRegistration();">
+                <label>Unique Username Handle</label>
+                <input type="text" id="auth-signup-username" placeholder="Letters/numbers only" required>
+                <label>Email Address</label>
+                <input type="email" id="auth-signup-email" placeholder="name@domain.com" required>
+                <label>Password</label>
+                <input type="password" id="auth-signup-pass" placeholder="Minimum 6 characters" required>
+                <button type="submit" class="action-submit-trigger">Create Protected Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="main-application-dashboard">
+        <header>
+            <div class="desktop-container header-grid">
+                <div class="brand-logo" onclick="navigateToPanel('feed')">SilverShot Dashboard</div>
+                <nav>
+                    <button class="nav-button active" id="nav-btn-feed" onclick="navigateToPanel('feed')">🗺️ Timelines</button>
+                    <button class="nav-button" id="nav-btn-search" onclick="navigateToPanel('search')">🔍 Search</button>
+                    <button class="nav-button" id="nav-btn-upload" onclick="navigateToPanel('upload')">📸 Upload</button>
+                    <button class="nav-button" id="nav-btn-messages" onclick="navigateToPanel('messages')">💬 Messages</button>
+                    <button class="nav-button" id="nav-btn-profile" onclick="viewProfileContext('self')">👤 Profile</button>
+                    
+                    <div class="resource-indicator-pill">
+                        <span id="header-medal-countdown">🥇 Ready</span>
+                        <span id="header-broccoli-countdown">🥦 Ready</span>
+                    </div>
+
+                    <button class="nav-button" style="color: #ef4444;" onclick="executePlatformLogout()">🚪 Logout</button>
+                </nav>
+            </div>
+        </header>
+
+        <div class="desktop-container">
+            <div id="view-panel-feed" class="view-panel active">
+                <div class="feed-layout-grid">
+                    <div class="feed-tabs-sidebar">
+                        <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--steel-gray);">Stream</h4>
+                        <button class="feed-selector-btn active" id="filter-btn-fyp" onclick="adjustFeedOrdering('fyp')">For You Feed</button>
+                        <button class="feed-selector-btn" id="filter-btn-trending" onclick="adjustFeedOrdering('trending')">Trending Metrics</button>
+                    </div>
+                    <div class="feed-stream-column" id="timeline-posts-injection-slot"></div>
+                </div>
+            </div>
+
+            <div id="view-panel-search" class="view-panel">
+                <div class="form-layout-box">
+                    <h3>Global Discovery Matrix</h3>
+                    <form onsubmit="event.preventDefault(); executeWeightedSearchQuery();">
+                        <input type="text" id="network-query-input" placeholder="Type search term and press Enter...">
+                        <button type="submit" class="action-submit-trigger" style="padding:10px; margin-bottom:20px;">Execute Query Scan</button>
+                    </form>
+                    
+                    <div style="margin-top:20px;">
+                        <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:12px;">Matched Creators</h4>
+                        <div id="search-users-injection-node"></div>
+                    </div>
+                    <div style="margin-top:30px;">
+                        <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:12px;">Matched Content</h4>
+                        <div id="search-posts-injection-node"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-panel-upload" class="view-panel">
+                <div class="form-layout-box">
+                    <h3>Publish Daily Image Module</h3>
+                    <div class="alert-banner-info">
+                        Select a border matrix ratio and crop the workspace bounds before executing data pipeline storage commitments.
+                    </div>
+                    
+                    <label>Select File</label>
+                    <input type="file" id="input-graphic-file" accept="image/*" onchange="initializeCropAssetPipeline()">
+                    
+                    <div class="crop-workbench-frame" id="crop-preview-frame">
+                        <img id="crop-source-buffer" class="crop-source-element" alt="Buffer">
+                    </div>
+
+                    <label>Border Ratio Dimension</label>
+                    <div class="ratio-control-row">
+                        <button class="ratio-btn active-ratio" id="ratio-btn-1-1" onclick="modifyCropBorderRatio(1, 1, '1-1')">Square (1:1)</button>
+                        <button class="ratio-btn" id="ratio-btn-4-5" onclick="modifyCropBorderRatio(4, 5, '4-5')">Portrait (4:5)</button>
+                        <button class="ratio-btn" id="ratio-btn-16-9" onclick="modifyCropBorderRatio(16, 9, '16-9')">Widescreen (16:9)</button>
+                    </div>
+
+                    <label>Category Stream</label>
+                    <select id="input-graphic-topic">
+                        <option value="General">General</option>
+                        <option value="Sports">Sports</option>
+                        <option value="News">News</option>
+                        <option value="Tech">Tech</option>
+                    </select>
+
+                    <label>Caption text</label>
+                    <textarea id="input-graphic-caption" placeholder="Describe the moment... Include #Tags" maxlength="300" rows="4" oninput="monitorTextLength()"></textarea>
+                    <div class="character-indicator" id="text-length-indicator">0 / 300 Characters</div>
+
+                    <button class="action-submit-trigger" onclick="dispatchImageUploadToServer()">Commit Asset Allocation</button>
+                </div>
+            </div>
+
+            <div id="view-panel-messages" class="view-panel">
+                <div class="messaging-layout-grid">
+                    <div class="dm-sidebar-list" id="dm-active-threads-list"></div>
+                    <div class="dm-chat-window">
+                        <div class="dm-messages-scroll" id="chat-conversation-scroll-node">
+                            <p style="text-align:center; color:var(--steel-gray); margin-top:40px;">Select a channel node.</p>
+                        </div>
+                        <form class="dm-input-tray" onsubmit="event.preventDefault(); dispatchDirectMessageToServer();">
+                            <input type="text" id="dm-message-input-text" placeholder="Write private text and press Enter..." required>
+                            <button type="submit" class="dm-send-btn">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-panel-profile" class="view-panel">
+                <div class="profile-layout-grid">
+                    <div class="profile-sidecard">
+                        <div class="large-profile-avatar" id="label-avatar-symbol">C</div>
+                        <h3 id="label-profile-fullname">Active Profile</h3>
+                        <h5 id="label-profile-handle" style="color:var(--steel-gray); font-weight:500; margin-bottom:10px;">@handle</h5>
+                        <p class="bio" id="label-profile-bio">Bio text area string layer.</p>
+                        
+                        <div class="profile-badge-row">
+                            <span class="badge-pill" id="label-profile-followers-count">0 Followers</span>
+                            <span class="badge-pill" id="label-profile-following-count">0 Following</span>
+                            <span class="badge-pill" id="label-profile-country">Region</span>
+                        </div>
+                        <div id="profile-interaction-context-buttons" style="margin: 15px 0;"></div>
+
+                        <div class="edit-form-box" id="profile-edit-management-box" style="margin-top:25px; border-top:1px solid #e2e8f0; padding-top:20px; text-align:left;">
+                            <h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:15px; color:var(--steel-gray);">Account Settings</h4>
+                            <label>Profile Picture</label>
+                            <input type="file" id="form-field-avatar" accept="image/*" onchange="readLocalAvatarAsset()">
+                            <div class="upload-preview-frame" id="avatar-preview-frame" style="height:80px; width:80px; border-radius:50%; margin-bottom:15px; border:2px solid #cbd5e1;"></div>
+
+                            <label>Display Name</label>
+                            <input type="text" id="form-field-fullname-input">
+                            <label>Biography Summary</label>
+                            <textarea id="form-field-bio" rows="2" maxlength="150"></textarea>
+
+                            <label>Account Privacy Model</label>
+                            <select id="form-field-privacy">
+                                <option value="public">Public Account Mode</option>
+                                <option value="private">Private Account Mode</option>
+                            </select>
+                            <label>Direct Messaging Gates</label>
+                            <select id="form-field-dm-gate">
+                                <option value="everyone">Allow From Everyone</option>
+                                <option value="following">Allow Only From Following</option>
+                                <option value="none">Block All Communication</option>
+                            </select>
+                            <button class="action-submit-trigger" style="padding:10px; font-size:0.85rem;" onclick="dispatchProfileUpdatesToServer()">Commit Configurations</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px;">Preserved Top 3 Gallery (Click to Enlarge)</h4>
+                        <div class="hall-of-fame-grid" id="hall-of-fame-injection-slot"></div>
+                        <h4 style="font-size:0.85rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px;">Active 24h Post (Click to Enlarge)</h4>
+                        <div id="self-active-timeline-post-slot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lightbox-modal" id="global-lightbox-overlay" onclick="dismissLightboxOverlay()">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <button class="close-lightbox" onclick="dismissLightboxOverlay()">&times;</button>
+            <div id="lightbox-post-render-area"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = "https://silvershot-service-module.onrender.com";
+
+        let sessionState = null;
+        let systemFeedOrderingMode = "fyp";
+        let structuralBase64String = "";
+        let pendingAvatarBase64 = null;
+        let activeChatPartner = null;
+        let activeChatInterval = null;
+        let globalClockDaemonInstance = null;
+
+        let currentTargetAspectWidth = 1;
+        let currentTargetAspectHeight = 1;
+
+        window.onload = function() {
+            const cachedTokenData = localStorage.getItem('silvershot_session_node');
+            if (cachedTokenData) {
+                try {
+                    sessionState = JSON.parse(cachedTokenData);
+                    document.getElementById('application-auth-gateway').style.display = 'none';
+                    document.getElementById('main-application-dashboard').style.display = 'block';
+                    navigateToPanel('feed');
+                    initializeGlobalClocksDaemon();
+                } catch(e) {
+                    localStorage.removeItem('silvershot_session_node');
+                }
+            }
+        };
+
+        // RUNNING SYSTEM FOR METRIC AND EXPIRES TEXT STRING EVALUATIONS
+        function initializeGlobalClocksDaemon() {
+            if(globalClockDaemonInstance) clearInterval(globalClockDaemonInstance);
+            executeIntervalClocksRefresh();
+            globalClockDaemonInstance = setInterval(executeIntervalClocksRefresh, 10000); // Poll calculations every 10 seconds
+        }
+
+        function calculateTimeRemainingText(createdAtString) {
+            if(!createdAtString) return "0m left";
+            const createdDate = new Date(createdAtString);
+            const absoluteExpirationDate = new Date(createdDate.getTime() + (24 * 60 * 60 * 1000));
+            const rightNow = new Date();
+            
+            const differenceMilliseconds = absoluteExpirationDate - rightNow;
+            if(differenceMilliseconds <= 0) return "Expired";
+
+            const totalMinutesRemaining = Math.floor(differenceMilliseconds / (1000 * 60));
+            const hoursPart = Math.floor(totalMinutesRemaining / 60);
+            const minutesPart = totalMinutesRemaining % 60;
+
+            if (hoursPart >= 1) {
+                return `${hoursPart}h left`;
+            } else {
+                return `${minutesPart}m left`;
+            }
+        }
+
+        function executeIntervalClocksRefresh() {
+            if(!sessionState) return;
+
+            // 1. Evaluate reaction counters inside top header navigation nodes
+            const timestampNow = new Date();
+
+            const medalDelta = sessionState.lastMedalUsedAt ? (timestampNow - new Date(sessionState.lastMedalUsedAt)) : Infinity;
+            const medalHoursRemaining = 24 - (medalDelta / (1000 * 60 * 60));
+            const medalNode = document.getElementById('header-medal-countdown');
+            if(medalNode) {
+                if(medalHoursRemaining <= 0) medalNode.innerText = "🥇 Ready";
+                else if(medalHoursRemaining >= 1) medalNode.innerText = `🥇 ${Math.floor(medalHoursRemaining)}h`;
+                else medalNode.innerText = `🥇 ${Math.floor((24 * 60) - (medalDelta / (1000 * 60)))}m`;
+            }
+
+            const broccoliDelta = sessionState.lastBroccoliUsedAt ? (timestampNow - new Date(sessionState.lastBroccoliUsedAt)) : Infinity;
+            const broccoliHoursRemaining = 24 - (broccoliDelta / (1000 * 60 * 60));
+            const broccoliNode = document.getElementById('header-broccoli-countdown');
+            if(broccoliNode) {
+                if(broccoliHoursRemaining <= 0) broccoliNode.innerText = "🥦 Ready";
+                else if(broccoliHoursRemaining >= 1) broccoliNode.innerText = `🥦 ${Math.floor(broccoliHoursRemaining)}h`;
+                else broccoliNode.innerText = `🥦 ${Math.floor((24 * 60) - (broccoliDelta / (1000 * 60)))}m`;
+            }
+
+            // 2. Loop active lifespan badges on feed post nodes dynamically
+            document.querySelectorAll('[data-post-created-at]').forEach(element => {
+                const dateStr = element.getAttribute('data-post-created-at');
+                element.innerText = calculateTimeRemainingText(dateStr);
+            });
+        }
+
+        function toggleAuthMode(target) {
+            document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.auth-form-view').forEach(v => v.classList.remove('active'));
+            document.getElementById('tab-btn-' + target).classList.add('active');
+            document.getElementById('form-view-' + target).classList.add('active');
+        }
+
+        function monitorTextLength() {
+            const count = document.getElementById('input-graphic-caption').value.length;
+            document.getElementById('text-length-indicator').innerText = `${count} / 300 Characters`;
+        }
+
+        function adjustFeedOrdering(mode) {
+            systemFeedOrderingMode = mode;
+            document.getElementById('filter-btn-fyp').classList.remove('active');
+            document.getElementById('filter-btn-trending').classList.remove('active');
+            document.getElementById('filter-btn-' + mode).classList.add('active');
+            renderFeedStreamTimeline();
+        }
+
+        function initializeCropAssetPipeline() {
+            const targetFile = document.getElementById('input-graphic-file').files[0];
+            if (!targetFile) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgNode = document.getElementById('crop-source-buffer');
+                imgNode.src = e.target.result;
+                imgNode.style.display = 'block';
+            };
+            reader.readAsDataURL(targetFile);
+        }
+
+        function modifyCropBorderRatio(w, h, btnId) {
+            currentTargetAspectWidth = w;
+            currentTargetAspectHeight = h;
+            document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active-ratio'));
+            document.getElementById('ratio-btn-' + btnId).classList.add('active-ratio');
+        }
+
+        function executeCanvasCropAlgorithm() {
+            const sourceImg = document.getElementById('crop-source-buffer');
+            if (!sourceImg.src || sourceImg.style.display === 'none') return null;
+
+            const hiddenCanvas = document.createElement('canvas');
+            const outputTargetWidth = 800;
+            const outputTargetHeight = Math.round((outputTargetWidth * currentTargetAspectHeight) / currentTargetAspectWidth);
+
+            hiddenCanvas.width = outputTargetWidth;
+            hiddenCanvas.height = outputTargetHeight;
+            const ctx = hiddenCanvas.getContext('2d');
+
+            let sourceWidth = sourceImg.naturalWidth;
+            let sourceHeight = sourceImg.naturalHeight;
+            let targetRatio = currentTargetAspectWidth / currentTargetAspectHeight;
+            let sourceRatio = sourceWidth / sourceHeight;
+
+            let sX = 0, sY = 0, sWidth = sourceWidth, sHeight = sourceHeight;
+
+            if (sourceRatio > targetRatio) {
+                sWidth = sourceHeight * targetRatio;
+                sX = (sourceWidth - sWidth) / 2;
+            } else {
+                sHeight = sourceWidth / targetRatio;
+                sY = (sourceHeight - sHeight) / 2;
+            }
+
+            ctx.drawImage(sourceImg, sX, sY, sWidth, sHeight, 0, 0, outputTargetWidth, outputTargetHeight);
+            return hiddenCanvas.toDataURL('image/jpeg', 0.75);
+        }
+
+        function readLocalAvatarAsset() {
+            const targetFile = document.getElementById('form-field-avatar').files[0];
+            if (!targetFile) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgElement = new Image();
+                imgElement.src = e.target.result;
+                imgElement.onload = function() {
+                    const hiddenCanvas = document.createElement('canvas');
+                    hiddenCanvas.width = 150;
+                    hiddenCanvas.height = 150;
+                    const ctx = hiddenCanvas.getContext('2d');
+                    ctx.drawImage(imgElement, 0, 0, 150, 150);
+                    pendingAvatarBase64 = hiddenCanvas.toDataURL('image/jpeg', 0.7);
+                    
+                    const frame = document.getElementById('avatar-preview-frame');
+                    frame.style.backgroundImage = `url('${pendingAvatarBase64}')`;
+                    frame.style.display = 'block';
+                };
+            };
+            reader.readAsDataURL(targetFile);
+        }
+
+        async function triggerReactionUpdate(postId, type) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/posts/react`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ postId, username: sessionState.username, reactionType: type })
+                });
+                const data = await res.json();
+                
+                if (!res.ok) {
+                    alert(data.error || "Reaction blocked by reload rule rules.");
+                    return;
+                }
+
+                // Synchronize global token headers timestamp counters
+                sessionState.lastMedalUsedAt = data.lastMedalUsedAt;
+                sessionState.lastBroccoliUsedAt = data.lastBroccoliUsedAt;
+                localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
+                executeIntervalClocksRefresh();
+
+                const likeBtn = document.getElementById(`btn-like-${postId}`);
+                const medalBtn = document.getElementById(`btn-medal-${postId}`);
+                const broccoliBtn = document.getElementById(`btn-broccoli-${postId}`);
+
+                if(likeBtn) {
+                    likeBtn.innerText = `❤️ ${data.likes}`;
+                    likeBtn.className = `reaction-node-trigger ${data.likedBy.includes(sessionState.username.toLowerCase()) ? 'active-liked' : ''}`;
+                }
+                if(medalBtn) {
+                    medalBtn.innerText = `🥇 ${data.medals}`;
+                    medalBtn.className = `reaction-node-trigger ${data.medaledBy.includes(sessionState.username.toLowerCase()) ? 'active-medaled' : ''}`;
+                }
+                if(broccoliBtn) {
+                    broccoliBtn.innerText = `🥦 ${data.broccolis}`;
+                    broccoliBtn.className = `reaction-node-trigger ${data.broccoliedBy.includes(sessionState.username.toLowerCase()) ? 'active-broccolied' : ''}`;
+                }
+            } catch(e) {
+                alert("Failed to sync structural reaction metrics.");
+            }
+        }
+
+        function generateReactionToolbar(post) {
+            const userHandle = sessionState.username.toLowerCase();
+            const isLiked = post.likedBy && post.likedBy.includes(userHandle);
+            const isMedaled = post.medaledBy && post.medaledBy.includes(userHandle);
+            const isBroccolied = post.broccoliedBy && post.broccoliedBy.includes(userHandle);
+
+            return `
+                <div class="reaction-toolbar-tray">
+                    <button id="btn-like-${post._id}" class="reaction-node-trigger ${isLiked ? 'active-liked' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'like')">❤️ ${post.likes || 0}</button>
+                    <button id="btn-medal-${post._id}" class="reaction-node-trigger ${isMedaled ? 'active-medaled' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'medal')">🥇 ${post.medals || 0}</button>
+                    <button id="btn-broccoli-${post._id}" class="reaction-node-trigger ${isBroccolied ? 'active-broccolied' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'broccoli')">🥦 ${post.broccolis || 0}</button>
+                </div>
+            `;
+        }
+
+        async function executeServerRegistration() {
+            const username = document.getElementById('auth-signup-username').value.trim();
+            const email = document.getElementById('auth-signup-email').value.trim();
+            const password = document.getElementById('auth-signup-pass').value;
+
+            const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            const data = await res.json();
+            if (res.ok) { alert("Registration successful."); toggleAuthMode('signin'); } else { alert(data.error); }
+        }
+
+        async function executeServerLogin() {
+            const loginInput = document.getElementById('auth-signin-login').value.trim();
+            const password = document.getElementById('auth-signin-pass').value;
+
+            const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ loginInput, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                sessionState = data;
+                localStorage.setItem('silvershot_session_node', JSON.stringify(data));
+                document.getElementById('application-auth-gateway').style.display = 'none';
+                document.getElementById('main-application-dashboard').style.display = 'block';
+                navigateToPanel('feed');
+                initializeGlobalClocksDaemon();
+            } else { alert(data.error); }
+        }
+
+        function executePlatformLogout() {
+            localStorage.removeItem('silvershot_session_node');
+            sessionState = null;
+            if(activeChatInterval) clearInterval(activeChatInterval);
+            if(globalClockDaemonInstance) clearInterval(globalClockDaemonInstance);
+            document.getElementById('main-application-dashboard').style.display = 'none';
+            document.getElementById('application-auth-gateway').style.display = 'flex';
+        }
+
+        function navigateToPanel(panelId) {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+            if(activeChatInterval) clearInterval(activeChatInterval);
+
+            document.getElementById('view-panel-' + panelId).classList.add('active');
+            document.getElementById('nav-btn-' + panelId).classList.add('active');
+
+            if (panelId === 'feed') renderFeedStreamTimeline();
+            if (panelId === 'messages') buildChatThreadsSidebar();
+        }
+
+        async function renderFeedStreamTimeline() {
+            const displayNode = document.getElementById('timeline-posts-injection-slot');
+            displayNode.innerHTML = '';
+            const res = await fetch(`${API_BASE_URL}/api/feed/${sessionState.username}`);
+            let list = await res.json();
+
+            if (systemFeedOrderingMode === 'fyp') {
+                list.sort((alpha, beta) => {
+                    let metricA = (alpha.likes || 0) + ((alpha.medals || 0) * 10) - ((alpha.broccolis || 0) * 15);
+                    let metricB = (beta.likes || 0) + ((beta.medals || 0) * 10) - ((beta.broccolis || 0) * 15);
+                    return metricB - metricA;
+                });
+            } else {
+                list.sort((alpha, beta) => (beta.likes || 0) - (alpha.likes || 0));
+            }
+
+            list.forEach(post => {
+                const card = document.createElement('div');
+                card.className = 'post-card';
+                const avatar = post.avatarImg ? `style="background-image:url('${post.avatarImg}')"` : '';
+                
+                let tagsMarkup = '';
+                if(post.hashtags) {
+                    post.hashtags.forEach(t => { tagsMarkup += `<span class="tag-pill">#${t}</span>`; });
+                }
+
+                card.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-header-left">
+                            <div class="avatar-clickable" ${avatar} onclick="viewProfileContext('${post.username}')">${post.avatarImg?'':post.initial}</div>
+                            <div class="user-info-text">
+                                <h5 onclick="viewProfileContext('${post.username}')">${post.fullName}</h5>
+                                <h6>@${post.username}</h6>
+                            </div>
+                        </div>
+                        <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">
+                            ${calculateTimeRemainingText(post.createdAt)}
+                        </div>
+                    </div>
+                    <div class="image-display-area" style="background-image:url('${post.img}')"></div>
+                    <div class="tag-pill-container">${tagsMarkup}</div>
+                    <div class="caption-text-block">${post.caption}</div>
+                    ${generateReactionToolbar(post)}
+                `;
+                displayNode.appendChild(card);
+            });
+        }
+
+        async function dispatchImageUploadToServer() {
+            const caption = document.getElementById('input-graphic-caption').value;
+            const category = document.getElementById('input-graphic-topic').value;
+            
+            const processedBase64 = executeCanvasCropAlgorithm();
+            if(!processedBase64) { alert("Attach and crop file asset verification."); return; }
+
+            const tagSegments = [];
+            const tokenRegex = /#(\w+)/g;
+            let match;
+            while ((match = tokenRegex.exec(caption)) !== null) {
+                if (tagSegments.length < 5) {
+                    tagSegments.push(match[1].toLowerCase());
+                }
+            }
+
+            const res = await fetch(`${API_BASE_URL}/api/posts/upload`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: sessionState.username, img: processedBase64, category, caption, hashtags: tagSegments })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                sessionState.activePost = data.activePost;
+                sessionState.hallOfFame = data.userHallOfFame || sessionState.hallOfFame;
+                localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
+                document.getElementById('input-graphic-caption').value = '';
+                document.getElementById('crop-source-buffer').style.display = 'none';
+                document.getElementById('crop-source-buffer').src = '';
+                document.getElementById('input-graphic-file').value = '';
+                alert("Upload complete.");
+                navigateToPanel('feed');
+            }
+        }
+
+        async function executeWeightedSearchQuery() {
+            const stringToken = document.getElementById('network-query-input').value.trim();
+            const profilesSlot = document.getElementById('search-users-injection-node');
+            const streamSlot = document.getElementById('search-posts-injection-node');
+            
+            if(!stringToken) { profilesSlot.innerHTML = ''; streamSlot.innerHTML = ''; return; }
+
+            const res = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(stringToken)}`);
+            const metrics = await res.json();
+
+            profilesSlot.innerHTML = '';
+            if(metrics.users.length === 0) profilesSlot.innerHTML = '<p style="font-size:0.85rem; color:var(--steel-gray);">No user nodes match.</p>';
+            metrics.users.forEach(u => {
+                const row = document.createElement('div');
+                row.className = "search-result-profile-card";
+                row.innerHTML = `
+                    <div>
+                        <strong style="cursor:pointer;" onclick="viewProfileContext('${u.username}')">${u.fullName}</strong>
+                        <p style="font-size:0.8rem; color:var(--steel-gray);">@${u.username} • ${u.followersCount} Followers</p>
+                    </div>
+                    <button class="interaction-btn" style="padding:6px 12px; font-size:0.75rem;" onclick="viewProfileContext('${u.username}')">View Context</button>
+                `;
+                profilesSlot.appendChild(row);
+            });
+
+            streamSlot.innerHTML = '';
+            if(metrics.posts.length === 0) streamSlot.innerHTML = '<p style="font-size:0.85rem; color:var(--steel-gray);">No timeline matches.</p>';
+            metrics.posts.forEach(post => {
+                const container = document.createElement('div');
+                container.className = "post-card";
+                let elements = '';
+                if(post.hashtags) post.hashtags.forEach(t => { elements += `<span class="tag-pill">#${t}</span>`; });
+
+                container.innerHTML = `
+                    <div class="post-header">
+                        <div class="user-info-text"><h5 style="cursor:pointer;" onclick="viewProfileContext('${post.username}')">${post.fullName}</h5><h6>@${post.username}</h6></div>
+                        <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">${calculateTimeRemainingText(post.createdAt)}</div>
+                    </div>
+                    <div class="image-display-area" style="background-image:url('${post.img}'); height:260px;"></div>
+                    <div class="tag-pill-container">${elements}</div>
+                    <div class="caption-text-block">${post.caption}</div>
+                    ${generateReactionToolbar(post)}
+                `;
+                streamSlot.appendChild(container);
+            });
+        }
+
+        async function dispatchProfileUpdatesToServer() {
+            const fullName = document.getElementById('form-field-fullname-input').value.trim();
+            const bio = document.getElementById('form-field-bio').value;
+            const isPrivate = document.getElementById('form-field-privacy').value === 'private';
+            const allowMessagesFrom = document.getElementById('form-field-dm-gate').value;
+
+            const res = await fetch(`${API_BASE_URL}/api/profile/update`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: sessionState.username, fullName, bio, isPrivate, allowMessagesFrom,
+                    avatarString: pendingAvatarBase64 || sessionState.avatarString,
+                    age: sessionState.age, status: sessionState.status, country: sessionState.country, hideFollowersList: sessionState.hideFollowersList
+                })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                sessionState.fullName = data.user.fullName;
+                sessionState.bio = data.user.bio;
+                sessionState.isPrivate = data.user.isPrivate;
+                sessionState.allowMessagesFrom = data.user.allowMessagesFrom;
+                sessionState.avatarString = data.user.avatarString;
+                localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
+                alert("Profile synchronized.");
+                viewProfileContext('self');
+            }
+        }
+
+        function triggerEnlargedPostViewModal(item) {
+            let tagsMarkup = '';
+            if(item.hashtags) {
+                item.hashtags.forEach(t => { tagsMarkup += `<span class="tag-pill">#${t}</span>`; });
+            }
+
+            document.getElementById('lightbox-post-render-area').innerHTML = `
+                <div class="post-card" style="box-shadow:none; border:none; padding:0; margin-bottom:0;">
+                    <div class="post-header">
+                        <div class="user-info-text">
+                            <h5>${item.fullName}</h5>
+                            <h6>@${item.username}</h6>
+                        </div>
+                        <div class="post-lifespan-badge">${item.createdAt ? calculateTimeRemainingText(item.createdAt) : 'Showcase Entry'}</div>
+                    </div>
+                    <div class="image-display-area" style="background-image:url('${item.img}'); height:420px;"></div>
+                    <div class="tag-pill-container">${tagsMarkup}</div>
+                    <p class="caption-text-block">${item.caption}</p>
+                </div>
+            `;
+            document.getElementById('global-lightbox-overlay').style.display = 'flex';
+        }
+
+        async function viewProfileContext(target) {
+            let contextData = null;
+            if (target === 'self' || target === sessionState.username) {
+                contextData = sessionState;
+                document.getElementById('profile-edit-management-box').style.display = 'block';
+                document.getElementById('profile-interaction-context-buttons').innerHTML = '';
+
+                document.getElementById('form-field-fullname-input').value = contextData.fullName || '';
+                document.getElementById('form-field-bio').value = contextData.bio || '';
+                document.getElementById('form-field-privacy').value = contextData.isPrivate ? 'private' : 'public';
+                document.getElementById('form-field-dm-gate').value = contextData.allowMessagesFrom || 'everyone';
+            } else {
+                document.getElementById('profile-edit-management-box').style.display = 'none';
+                contextData = { username: target, fullName: target + " Account", bio: "External node record profile.", followers: [], following: [], country: "Global", hallOfFame: [] };
+                
+                const btn = document.createElement('button');
+                btn.className = "action-submit-trigger";
+                btn.innerText = "Follow Channel Handle";
+                btn.onclick = async () => {
+                    await fetch(`${API_BASE_URL}/api/relations/follow`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sender: sessionState.username, target })
+                    });
+                    alert("Relationship tracking update processed.");
+                };
+                document.getElementById('profile-interaction-context-buttons').innerHTML = '';
+                document.getElementById('profile-interaction-context-buttons').appendChild(btn);
+            }
+
+            const bigAvatarNode = document.getElementById('label-avatar-symbol');
+            if (contextData.avatarString) {
+                bigAvatarNode.style.backgroundImage = `url('${contextData.avatarString}')`;
+                bigAvatarNode.style.color = 'transparent';
+            } else {
+                bigAvatarNode.style.backgroundImage = 'none';
+                bigAvatarNode.style.color = 'white';
+                bigAvatarNode.innerText = contextData.username.charAt(0).toUpperCase();
+            }
+
+            document.getElementById('label-profile-fullname').innerText = contextData.fullName;
+            document.getElementById('label-profile-handle').innerText = '@' + contextData.username;
+            document.getElementById('label-profile-bio').innerText = contextData.bio;
+            document.getElementById('label-profile-followers-count').innerText = `${contextData.followers ? contextData.followers.length : 0} Followers`;
+            document.getElementById('label-profile-following-count').innerText = `${contextData.following ? contextData.following.length : 0} Following`;
+            document.getElementById('label-profile-country').innerText = contextData.country || 'Global';
+
+            const galleryNode = document.getElementById('hall-of-fame-injection-slot');
+            galleryNode.innerHTML = '';
+            for(let i=0; i<3; i++) {
+                const slot = document.createElement('div');
+                if (contextData.hallOfFame && contextData.hallOfFame[i]) {
+                    const item = contextData.hallOfFame[i];
+                    slot.className = "hall-of-fame-slot";
+                    slot.style.backgroundImage = `url('${item.img}')`;
+                    slot.innerHTML = `<div class="hall-of-fame-badge">❤️ ${item.likes}</div>`;
+                    slot.onclick = () => triggerEnlargedPostViewModal(item);
+                } else {
+                    slot.className = "hall-of-fame-slot hall-slot-vacant";
+                    slot.innerText = "Locked Space";
+                }
+                galleryNode.appendChild(slot);
+            }
+
+            const activePostSlot = document.getElementById('self-active-timeline-post-slot');
+            if (contextData.activePost) {
+                activePostSlot.innerHTML = `
+                    <div class="post-card" style="margin-top:15px; cursor:pointer;">
+                        <div class="image-display-area" style="background-image:url('${contextData.activePost.img}'); height:220px;"></div>
+                        <p style="font-size:0.95rem; font-weight:500; margin-bottom:8px;">${contextData.activePost.caption}</p>
+                    </div>
+                `;
+                activePostSlot.firstElementChild.onclick = () => triggerEnlargedPostViewModal(contextData.activePost);
+            } else { activePostSlot.innerHTML = `<p style="font-size:0.85rem; color:var(--steel-gray); font-style:italic; margin-top:15px;">No active post listed.</p>`; }
+
+            navigateToPanel('profile');
+        }
+
+        function dismissLightboxOverlay() { document.getElementById('global-lightbox-overlay').style.display = 'none'; }
+
+        async function buildChatThreadsSidebar() {
+            const baseNode = document.getElementById('dm-active-threads-list');
+            baseNode.innerHTML = '<h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:10px;">Channels</h4>';
+            if (sessionState.following && sessionState.following.length > 0) {
+                sessionState.following.forEach(user => {
+                    const row = document.createElement('div');
+                    row.className = "dm-user-row";
+                    row.innerText = '@' + user;
+                    row.onclick = () => launchActiveChatThreadChannel(user);
+                    baseNode.appendChild(row);
+                });
+            } else { baseNode.innerHTML += '<p style="font-size:0.8rem; color:var(--steel-gray); font-style:italic;">No connections found.</p>'; }
+        }
+
+        function launchActiveChatThreadChannel(username) {
+            activeChatPartner = username;
+            document.querySelectorAll('.dm-user-row').forEach(r => r.classList.remove('active'));
+            if(activeChatInterval) clearInterval(activeChatInterval);
+            pollConversationMessages();
+            activeChatInterval = setInterval(pollConversationMessages, 3000);
+        }
+
+        async function pollConversationMessages() {
+            if(!activeChatPartner) return;
+            const scrollBox = document.getElementById('chat-conversation-scroll-node');
+            const res = await fetch(`${API_BASE_URL}/api/messages/thread/${sessionState.username}/${activeChatPartner}`);
+            const logs = await res.json();
+
+            scrollBox.innerHTML = '';
+            logs.forEach(msg => {
+                const item = document.createElement('div');
+                const flowDir = msg.sender === sessionState.username ? 'sent' : 'received';
+                item.className = `chat-bubble ${flowDir}`;
+                item.innerText = msg.text;
+                scrollBox.appendChild(item);
+            });
+            scrollBox.scrollTop = scrollBox.scrollHeight;
+        }
+
+        async function dispatchDirectMessageToServer() {
+            const text = document.getElementById('dm-message-input-text').value;
+            if(!text.trim() || !activeChatPartner) return;
+
+            await fetch(`${API_BASE_URL}/api/messages/send`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender: sessionState.username, receiver: activeChatPartner, text })
+            });
+            document.getElementById('dm-message-input-text').value = '';
+            pollConversationMessages();
+        }
+    </script>
+</body>
+</html>
