@@ -1,0 +1,1 @@
+mongodb+srv://silvershot_dev:aKa4ohr$@silvershotcluster.wexyaxl.mongodb.net/?appName=SilverShotCluster

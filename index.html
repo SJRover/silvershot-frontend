@@ -58,7 +58,13 @@
         .user-info-text h5 { font-size: 1rem; font-weight: 700; cursor: pointer; }
         .user-info-text h5:hover { text-decoration: underline; }
         .user-info-text h6 { font-size: 0.8rem; color: var(--steel-gray); font-weight: 500; }
+        
+        .post-meta-right-tray { display: flex; align-items: center; gap: 10px; }
         .post-lifespan-badge { background: #f1f5f9; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; color: var(--steel-gray); }
+        
+        /* ADMINISTRATIVE COMPONENT BUTTON ELEMENT */
+        .admin-danger-purge-btn { background: #ef4444; border: none; color: white; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; cursor: pointer; transition: background 0.15s; }
+        .admin-danger-purge-btn:hover { background: #dc2626; }
 
         .image-display-area { width: 100%; height: 400px; border-radius: 12px; background-size: cover; background-position: center; background-color: #cbd5e1; margin-bottom: 16px; transition: all 0.2s; }
         .tag-pill-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
@@ -247,7 +253,7 @@
                             <p style="text-align:center; color:var(--steel-gray); margin-top:40px;">Select a channel node.</p>
                         </div>
                         <form class="dm-input-tray" onsubmit="event.preventDefault(); dispatchDirectMessageToServer();">
-                            <input type="text" id="dm-message-input-text" placeholder="Write private text and press Enter..." required>
+                            <input type="text" id="dm-message-input-text" placeholder="Write text and press Enter..." required>
                             <button type="submit" class="dm-send-btn">Send</button>
                         </form>
                     </div>
@@ -341,11 +347,10 @@
             }
         };
 
-        // RUNNING SYSTEM FOR METRIC AND EXPIRES TEXT STRING EVALUATIONS
         function initializeGlobalClocksDaemon() {
             if(globalClockDaemonInstance) clearInterval(globalClockDaemonInstance);
             executeIntervalClocksRefresh();
-            globalClockDaemonInstance = setInterval(executeIntervalClocksRefresh, 10000); // Poll calculations every 10 seconds
+            globalClockDaemonInstance = setInterval(executeIntervalClocksRefresh, 10000);
         }
 
         function calculateTimeRemainingText(createdAtString) {
@@ -361,17 +366,12 @@
             const hoursPart = Math.floor(totalMinutesRemaining / 60);
             const minutesPart = totalMinutesRemaining % 60;
 
-            if (hoursPart >= 1) {
-                return `${hoursPart}h left`;
-            } else {
-                return `${minutesPart}m left`;
-            }
+            if (hoursPart >= 1) return `${hoursPart}h left`;
+            return `${minutesPart}m left`;
         }
 
         function executeIntervalClocksRefresh() {
             if(!sessionState) return;
-
-            // 1. Evaluate reaction counters inside top header navigation nodes
             const timestampNow = new Date();
 
             const medalDelta = sessionState.lastMedalUsedAt ? (timestampNow - new Date(sessionState.lastMedalUsedAt)) : Infinity;
@@ -392,11 +392,37 @@
                 else broccoliNode.innerText = `🥦 ${Math.floor((24 * 60) - (broccoliDelta / (1000 * 60)))}m`;
             }
 
-            // 2. Loop active lifespan badges on feed post nodes dynamically
             document.querySelectorAll('[data-post-created-at]').forEach(element => {
                 const dateStr = element.getAttribute('data-post-created-at');
                 element.innerText = calculateTimeRemainingText(dateStr);
             });
+        }
+
+        // ADMINISTRATIVE OVERRIDE DELETION PROTOCOLS
+        async function executeAdminPostPurge(postId) {
+            if (!confirm("Are you sure you want to remove this content asset from the timeline network?")) return;
+            const res = await fetch(`${API_BASE_URL}/api/admin/posts/${postId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ adminUsername: sessionState.username })
+            });
+            if (res.ok) {
+                alert("Post removed successfully by administrative moderation action.");
+                renderFeedStreamTimeline();
+            } else { alert("Failed to complete administrative action."); }
+        }
+
+        async function executeAdminAccountPurge(targetUser) {
+            if (!confirm(`CRITICAL WARNING: Purge user account profile @${targetUser} and all associated timeline assets entirely?`)) return;
+            const res = await fetch(`${API_BASE_URL}/api/admin/users/${targetUser}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ adminUsername: sessionState.username })
+            });
+            if (res.ok) {
+                alert("Offensive account handle profile and associated assets purged cleanly.");
+                navigateToPanel('feed');
+            } else { alert("Failed to execute account profile purge operation."); }
         }
 
         function toggleAuthMode(target) {
@@ -502,11 +528,10 @@
                 const data = await res.json();
                 
                 if (!res.ok) {
-                    alert(data.error || "Reaction blocked by reload rule rules.");
+                    alert(data.error || "Reaction blocked by configuration constraints.");
                     return;
                 }
 
-                // Synchronize global token headers timestamp counters
                 sessionState.lastMedalUsedAt = data.lastMedalUsedAt;
                 sessionState.lastBroccoliUsedAt = data.lastBroccoliUsedAt;
                 localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
@@ -528,9 +553,7 @@
                     broccoliBtn.innerText = `🥦 ${data.broccolis}`;
                     broccoliBtn.className = `reaction-node-trigger ${data.broccoliedBy.includes(sessionState.username.toLowerCase()) ? 'active-broccolied' : ''}`;
                 }
-            } catch(e) {
-                alert("Failed to sync structural reaction metrics.");
-            }
+            } catch(e) { alert("Failed to sync structural reaction metrics."); }
         }
 
         function generateReactionToolbar(post) {
@@ -629,6 +652,12 @@
                     post.hashtags.forEach(t => { tagsMarkup += `<span class="tag-pill">#${t}</span>`; });
                 }
 
+                // Render administrative purge controls dynamically for authorized sessions
+                let adminControlMarkup = '';
+                if(sessionState.isAdmin) {
+                    adminControlMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Admin Delete Post</button>`;
+                }
+
                 card.innerHTML = `
                     <div class="post-header">
                         <div class="post-header-left">
@@ -638,8 +667,11 @@
                                 <h6>@${post.username}</h6>
                             </div>
                         </div>
-                        <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">
-                            ${calculateTimeRemainingText(post.createdAt)}
+                        <div class="post-meta-right-tray">
+                            ${adminControlMarkup}
+                            <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">
+                                ${calculateTimeRemainingText(post.createdAt)}
+                            </div>
                         </div>
                     </div>
                     <div class="image-display-area" style="background-image:url('${post.img}')"></div>
@@ -719,10 +751,21 @@
                 let elements = '';
                 if(post.hashtags) post.hashtags.forEach(t => { elements += `<span class="tag-pill">#${t}</span>`; });
 
+                let postAdminMarkup = '';
+                if(sessionState.isAdmin) {
+                    postAdminMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Admin Delete Post</button>`;
+                }
+
                 container.innerHTML = `
                     <div class="post-header">
-                        <div class="user-info-text"><h5 style="cursor:pointer;" onclick="viewProfileContext('${post.username}')">${post.fullName}</h5><h6>@${post.username}</h6></div>
-                        <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">${calculateTimeRemainingText(post.createdAt)}</div>
+                        <div class="post-header-left">
+                            <h5 style="cursor:pointer;" onclick="viewProfileContext('${post.username}')">${post.fullName}</h5>
+                            <h6>@${post.username}</h6>
+                        </div>
+                        <div class="post-meta-right-tray">
+                            ${postAdminMarkup}
+                            <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">${calculateTimeRemainingText(post.createdAt)}</div>
+                        </div>
                     </div>
                     <div class="image-display-area" style="background-image:url('${post.img}'); height:260px;"></div>
                     <div class="tag-pill-container">${elements}</div>
@@ -799,6 +842,20 @@
                 document.getElementById('profile-edit-management-box').style.display = 'none';
                 contextData = { username: target, fullName: target + " Account", bio: "External node record profile.", followers: [], following: [], country: "Global", hallOfFame: [] };
                 
+                document.getElementById('profile-interaction-context-buttons').innerHTML = '';
+                
+                // Render administrative user purge triggers conditionally
+                if(sessionState.isAdmin) {
+                    const purgeBtn = document.createElement('button');
+                    purgeBtn.className = "admin-danger-purge-btn";
+                    purgeBtn.style.width = "100%";
+                    purgeBtn.style.padding = "12px";
+                    purgeBtn.style.marginBottom = "10px";
+                    purgeBtn.innerText = `🚨 Admin Purge Account @${target}`;
+                    purgeBtn.onclick = () => executeAdminAccountPurge(target);
+                    document.getElementById('profile-interaction-context-buttons').appendChild(purgeBtn);
+                }
+
                 const btn = document.createElement('button');
                 btn.className = "action-submit-trigger";
                 btn.innerText = "Follow Channel Handle";
@@ -810,7 +867,6 @@
                     });
                     alert("Relationship tracking update processed.");
                 };
-                document.getElementById('profile-interaction-context-buttons').innerHTML = '';
                 document.getElementById('profile-interaction-context-buttons').appendChild(btn);
             }
 
