@@ -22,7 +22,6 @@
             --text-color-primary: #0f172a;
         }
 
-        /* LIVE DARK COLOUR MODE OVERRIDES STYLE CLASSES */
         body.dark-theme-active {
             --silver-shine: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             --metallic-bg: #0f172a;
@@ -36,7 +35,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background: var(--silver-shine); background-attachment: fixed; color: var(--text-color-primary); min-height: 100vh; padding-bottom: 60px; transition: background 0.3s, color 0.3s; }
         
-        /* EXPANDED CONTAINER REAL ESTATE LAYOUT */
         .desktop-container { max-width: 1350px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
         .auth-gateway-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
@@ -55,11 +53,10 @@
         #main-application-dashboard { display: none; }
         header { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 15px 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-bottom: 30px; }
         
-        /* RESPONSIVE HEADER FLEX-WRAP CONFIGURATION */
         .header-grid { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: relative; }
 
-        .nav-button { background: none; border: none; color: #94a3b8; font-size: 0.95rem; font-weight: 700; cursor: pointer; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        .nav-button { background: none; border: none; color: #94a3b8; font-size: 0.95rem; font-weight: 700; cursor: pointer; padding: 8px 14px; border-radius: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; position: relative; }
         .nav-button:hover { color: white; background: rgba(255,255,255,0.05); }
         .nav-button.active { color: #0f172a; background: white; box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
         .resource-indicator-pill { background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: #cbd5e1; display: flex; gap: 8px; }
@@ -70,7 +67,7 @@
         .notif-dropdown-pane.visible { display: block; }
         .notif-header { padding: 12px 16px; background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--card-border); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--steel-gray); }
         .notif-list-scroll { max-height: 320px; overflow-y: auto; }
-        .notif-item-row { padding: 12px 16px; border-bottom: 1px solid var(--card-border); font-size: 0.85rem; line-height: 1.4; transition: background 0.1s; }
+        .notif-item-row { padding: 12px 16px; border-bottom: 1px solid var(--card-border); font-size: 0.85rem; line-height: 1.4; transition: background 0.1s; cursor: pointer; }
         .notif-item-row:hover { background: rgba(0,0,0,0.04); }
         .notif-time-stamp { font-size: 0.7rem; color: #94a3b8; margin-top: 4px; font-weight: 600; }
 
@@ -101,7 +98,6 @@
         .admin-danger-purge-btn { background: #ef4444; border: none; color: white; font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; cursor: pointer; transition: background 0.15s; }
         .admin-danger-purge-btn:hover { background: #dc2626; }
 
-        /* PORTRAIT DEVICE FLUID MAX-HEIGHT CONSTRAINT OVERRIDES */
         .image-display-area { width: 100%; height: 440px; max-height: 60vh; border-radius: 12px; background-size: cover; background-position: center; background-color: #cbd5e1; margin-bottom: 16px; cursor: pointer; }
         .tag-pill-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
         .tag-pill { font-size: 0.75rem; background: rgba(0,0,0,0.05); padding: 4px 10px; border-radius: 12px; color: var(--text-color-primary); font-weight: 600; }
@@ -115,6 +111,15 @@
         .reaction-node-trigger.active-liked { background: #fee2e2; color: #ef4444; }
         .reaction-node-trigger.active-medaled { background: #fef9c3; color: #ca8a04; }
         .reaction-node-trigger.active-broccolied { background: #dcfce7; color: #16a34a; }
+
+        .comments-section-container { margin-top: 15px; border-top: 1px solid var(--card-border); padding-top: 15px; display: none; }
+        .comment-node-card { border-left: 2px solid var(--steel-gray); padding-left: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.01); padding-top: 6px; padding-bottom: 6px; }
+        body.dark-theme-active .comment-node-card { background: rgba(255,255,255,0.01); }
+        .comment-node-meta { font-size: 0.8rem; font-weight: bold; display: flex; gap: 10px; color: var(--steel-gray); margin-bottom: 4px; }
+        .comment-node-text { font-size: 0.9rem; line-height: 1.4; color: var(--text-color-primary); margin-bottom: 6px; }
+        .comment-node-actions { display: flex; gap: 12px; font-size: 0.75rem; font-weight: bold; }
+        .comment-action-link { cursor: pointer; color: var(--steel-gray); text-decoration: none; }
+        .comment-action-link:hover { text-decoration: underline; }
 
         .crop-workbench-frame { width: 100%; height: 350px; background: rgba(0,0,0,0.05); border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; border: 2px dashed var(--steel-gray); }
         .crop-source-element { max-width: 100%; max-height: 350px; display: none; }
@@ -141,13 +146,13 @@
 
         .messaging-layout-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; background: var(--card-background); border-radius: 24px; border: 1px solid var(--card-border); min-height: 550px; overflow: hidden; }
         .dm-sidebar-list { background: rgba(0,0,0,0.02); border-right: 1px solid var(--card-border); padding: 15px; display: flex; flex-direction: column; gap: 8px; }
-        .dm-user-row { padding: 12px; background: var(--card-background); border: 1px solid var(--card-border); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+        .dm-user-row { padding: 12px; background: var(--card-background); border: 1px solid var(--card-border); border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
         .dm-user-row.active { background: #0f172a; color: white; }
         body.dark-theme-active .dm-user-row.active { background: #f8fafc; color: #0f172a; }
         .dm-chat-window { display: flex; flex-direction: column; height: 100%; min-width: 0; }
         .dm-messages-scroll { flex-grow: 1; padding: 20px; overflow-y: auto; background: rgba(0,0,0,0.01); display: flex; flex-direction: column; gap: 12px; max-height: 420px; }
         
-        .chat-bubble { max-width: 70%; padding: 10px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; word-wrap: break-word; }
+        .chat-bubble { max-width: 70%; padding: 10px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.4; word-wrap: break-word; position: relative; }
         .chat-bubble.sent { background: #0f172a; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
         body.dark-theme-active .chat-bubble.sent { background: #f8fafc; color: #0f172a; }
         .chat-bubble.received { background: #e2e8f0; color: #0f172a; align-self: flex-start; border-bottom-left-radius: 4px; }
@@ -167,16 +172,22 @@
         .toggle-setting-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 8px 0; border-bottom: 1px dashed var(--card-border); }
         
         .settings-toggle-btn { background: rgba(0,0,0,0.05); border: none; color: var(--text-color-primary); font-size: 0.85rem; font-weight: bold; padding: 8px 16px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
-        body.dark-theme-active .settings-toggle-btn { background: rgba(255,255,255,0.05); }
+        body.dark-theme-active .settings-toggle-btn { background: rgba(255, 255, 255, 0.05); }
 
-        /* HORIZONTAL METALLIC PROFILE HERO BANNER COMPONENT STYLES */
-        .profile-hero-banner-card { background: var(--card-background); border: 1px solid var(--card-border); border-radius: 24px; overflow: hidden; margin-bottom: 30px; position: relative; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.01); }
-        .profile-cover-canvas { height: 160px; background: linear-gradient(90deg, #94a3b8 0%, #475569 100%); width: 100%; }
-        .profile-details-pane { padding: 0 40px 30px 40px; text-align: left; position: relative; }
+        /* RESTRUCTURED SYMMETRICAL PROFILE HERO BANNER PANELS */
+        .profile-hero-banner-card { background: var(--card-background); border: 1px solid var(--card-border); border-radius: 24px; overflow: hidden; margin-bottom: 30px; position: relative; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.01); text-align: center; }
+        .profile-cover-canvas { height: 210px; background: linear-gradient(90deg, #94a3b8 0%, #475569 100%); width: 100%; background-size: cover; background-position: center; }
         
-        body.dark-theme-active #ranking-box-container { background: rgba(255,255,255,0.05) !important; }
+        /* COOLDOWN TIMELINE HUD LAYER BANNER STATUS INDICATOR */
+        .upload-cooldown-ticker-bar { width: 100%; background: rgba(15,23,42,0.85); color: #cbd5e1; font-size: 0.75rem; font-weight: bold; padding: 6px 0; text-align: center; letter-spacing: 0.5px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
 
-        /* KEYFRAME ANNOUNCEMENTS FOR SPINNER GRAPHICS */
+        .profile-details-pane { padding: 0 24px 30px 24px; text-align: center; position: relative; }
+        
+        .large-profile-avatar { width: 110px; height: 110px; border-radius: 50%; background: #0f172a; color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; margin: -55px auto 15px auto; border: 4px solid var(--card-background); background-size: cover; background-position: center; position: relative; z-index: 2; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .large-profile-avatar:hover { transform: scale(1.03); transition: transform 0.15s; }
+
+        .profile-badge-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 12px 0; }
+
         .loading-inline-spinner {
             width: 18px; height: 18px;
             border: 2px solid rgba(255,255,255,0.3);
@@ -193,14 +204,12 @@
             to { transform: rotate(360deg); }
         }
 
-        /* CUSTOM SERVER INTERACTION SYSTEM ERROR BANNER STYLE */
         .auth-error-feedback-container {
             background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;
             padding: 12px 16px; border-radius: 8px; font-size: 0.9rem;
             margin-bottom: 20px; display: none; font-weight: 500;
         }
 
-        /* --- MOBILE MEDIA QUERY BREAKPOINTS OVERRIDES --- */
         @media (max-width: 768px) {
             .feed-layout-grid { grid-template-columns: 1fr; gap: 20px; }
             .messaging-layout-grid { grid-template-columns: 1fr; }
@@ -208,7 +217,7 @@
             header { padding: 12px 0; margin-bottom: 20px; }
             .header-grid { flex-direction: column; text-align: center; }
             nav { justify-content: center; }
-            .profile-details-pane { padding: 0 20px 20px 20px; }
+            .profile-details-pane { padding: 0 16px 24px 16px; }
             .form-layout-box { padding: 24px; }
             .image-display-area { height: 320px; }
         }
@@ -258,7 +267,8 @@
                     <button class="nav-button active" id="nav-btn-feed" onclick="navigateToPanel('feed')">🗺️ Timelines</button>
                     <button class="nav-button" id="nav-btn-search" onclick="navigateToPanel('search')">🔍 Search</button>
                     <button class="nav-button" id="nav-btn-upload" onclick="navigateToPanel('upload')">📸 Upload</button>
-                    <button class="nav-button" id="nav-btn-messages" onclick="navigateToPanel('messages')">💬 Messages</button>
+                    
+                    <button class="nav-button" id="nav-btn-messages" onclick="navigateToPanel('messages')">💬 Messages <span id="msg-count-badge" class="notif-trigger-badge" style="display:none; background:#2563eb;">0</span></button>
                     <button class="nav-button" id="nav-btn-profile" onclick="viewProfileContext('self')">👤 Profile</button>
                     
                     <div class="resource-indicator-pill">
@@ -371,31 +381,32 @@
             <div id="view-panel-profile" class="view-panel">
                 
                 <div class="profile-hero-banner-card">
-                    <div class="profile-cover-canvas"></div>
+                    <div id="upload-cooldown-countdown-bar" class="upload-cooldown-ticker-bar" style="display:none;"></div>
+                    
+                    <div class="profile-cover-canvas" id="label-profile-banner-bg"></div>
                     <div class="profile-details-pane">
-                        <div class="large-profile-avatar" id="label-avatar-symbol" style="margin-top:-55px; border:4px solid var(--card-background); position:relative; z-index:2;">C</div>
+                        <div class="large-profile-avatar" id="label-avatar-symbol">C</div>
                         
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:15px; flex-wrap:wrap; gap:20px;">
-                            <div>
-                                <h2 id="label-profile-fullname" style="font-size:1.75rem; font-weight:800; letter-spacing:-0.5px;">User Profile</h2>
-                                <h5 id="label-profile-handle" style="color:var(--steel-gray); font-weight:500; margin-bottom:12px;">@handle</h5>
-                                <p class="bio" id="label-profile-bio" style="font-size:0.95rem; line-height:1.5; max-width:850px; margin-bottom:15px;">Bio description text row layout.</p>
-                            </div>
-                            
-                            <div style="display:flex; flex-direction:column; gap:10px; min-width:260px;">
-                                <div style="background:rgba(0,0,0,0.03); padding:12px; border-radius:12px; font-size:0.85rem;" id="ranking-box-container">
-                                    <div style="margin-bottom:4px;">🏆 <strong>Weekly Rank:</strong> <span id="label-profile-weekly-rank">Unranked</span></div>
-                                    <div>🚀 <strong>All-Time Best Rank:</strong> <span id="label-profile-highest-rank">Unranked</span></div>
-                                </div>
-                                <div class="profile-badge-row" style="display:flex; gap:6px; justify-content:flex-start; flex-wrap:wrap; margin:0;">
-                                    <span class="badge-pill" id="label-profile-followers-count">0 Followers</span>
-                                    <span class="badge-pill" id="label-profile-following-count">0 Following</span>
-                                    <span class="badge-pill" id="label-profile-country">Region</span>
-                                </div>
+                        <div style="text-align:center; margin-top:10px;">
+                            <h2 id="label-profile-fullname" style="font-size:1.75rem; font-weight:800; letter-spacing:-0.5px;">User Profile</h2>
+                            <h5 id="label-profile-handle" style="color:var(--steel-gray); font-weight:500; margin-bottom:12px;">@handle</h5>
+                            <p class="bio" id="label-profile-bio" style="font-size:0.95rem; line-height:1.5; max-width:700px; margin:0 auto 15px auto;">Bio description text row layout.</p>
+                        </div>
+                        
+                        <div style="display:flex; justify-content:center; margin-bottom:20px; width:100%;">
+                            <div style="background:rgba(0,0,0,0.03); padding:12px; border-radius:12px; font-size:0.85rem; width:100%; max-width:340px; text-align:center;" id="ranking-box-container">
+                                <div style="margin-bottom:4px;">🏆 <strong>Weekly Rank:</strong> <span id="label-profile-weekly-rank">Unranked</span></div>
+                                <div>🚀 <strong>All-Time Best Rank:</strong> <span id="label-profile-highest-rank">Unranked</span></div>
                             </div>
                         </div>
 
-                        <div style="margin-top:20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                        <div class="profile-badge-row">
+                            <span class="badge-pill" id="label-profile-followers-count">0 Followers</span>
+                            <span class="badge-pill" id="label-profile-following-count">0 Following</span>
+                            <span class="badge-pill" id="label-profile-country">Region</span>
+                        </div>
+
+                        <div style="margin-top:20px; display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap;">
                             <button id="profile-panel-settings-toggle" class="settings-toggle-btn" onclick="toggleProfileSubSectionView()" style="display:none; max-width:220px; margin:0;">⚙️ Open Settings Menu</button>
                             <div id="profile-interaction-context-buttons" style="display:flex; gap:8px; align-items:center;"></div>
                         </div>
@@ -419,6 +430,10 @@
                         <input type="file" id="form-field-avatar" accept="image/*" onchange="readLocalAvatarAsset()">
                         <div class="upload-preview-frame" id="avatar-preview-frame" style="height:80px; width:80px; border-radius:50%; margin-bottom:15px; border:2px solid #cbd5e1; background-size:cover; background-position:center;"></div>
 
+                        <label>Profile Banner Background</label>
+                        <input type="file" id="form-field-banner" accept="image/*" onchange="readLocalBannerAsset()">
+                        <div class="upload-preview-frame" id="banner-preview-frame" style="height:80px; width:100%; max-width:320px; border-radius:12px; margin-bottom:15px; border:2px solid #cbd5e1; background-size:cover; background-position:center;"></div>
+
                         <label>Display Name</label>
                         <input type="text" id="form-field-fullname-input">
                         <label>Biography</label>
@@ -440,6 +455,11 @@
                         <div style="margin-top:15px; border-top:1px solid var(--card-border); padding-top:15px;">
                             <h5 style="font-size:0.8rem; text-transform:uppercase; color:var(--steel-gray); margin-bottom:10px; font-weight:bold;">Blocked Profiles</h5>
                             <div id="blocked-users-list-container" style="max-height:120px; overflow-y:auto; font-size:0.85rem;"></div>
+                        </div>
+
+                        <div style="margin-top:20px; border-top:1px solid var(--card-border); padding-top:15px; background:rgba(37,99,235,0.05); padding:10px; border-radius:12px;">
+                            <h5 style="color:var(--system-blue); font-size:0.8rem; text-transform:uppercase; margin-bottom:5px; font-weight:bold;">Platform Support</h5>
+                            <p style="font-size:0.85rem; color:var(--steel-gray); line-height:1.4;">For any account queries, technical assistance, or network feedback, please contact administration directly via email at <strong>samjohnston17@outlook.com</strong>.</p>
                         </div>
 
                         <div style="margin-top:20px; border-top:1px solid #ef4444; padding-top:15px; background:rgba(239,68,68,0.05); padding:10px; border-radius:12px;">
@@ -468,13 +488,13 @@
     </div>
 
     <script>
-        // Update URL to match your live backend endpoint
         const API_BASE_URL = "https://silvershot-service-module.onrender.com";
 
         let sessionState = null;
         let systemFeedOrderingMode = "fyp";
         let structuralBase64String = "";
         let pendingAvatarBase64 = null;
+        let pendingBannerBase64 = null; // Background asset state block
         let activeChatPartner = null;
         let activeChatInterval = null;
         let globalClockDaemonInstance = null;
@@ -540,18 +560,19 @@
         function initializeGlobalClocksDaemon() {
             if(globalClockDaemonInstance) clearInterval(globalClockDaemonInstance);
             executeIntervalClocksRefresh();
-            globalClockDaemonInstance = setInterval(executeIntervalClocksRefresh, 10000);
+            globalClockDaemonInstance = setInterval(executeIntervalClocksRefresh, 5000);
         }
 
         function startNotificationTrackingLoop() {
             if(backgroundNotifLoopInstance) clearInterval(backgroundNotifLoopInstance);
             pollNotificationsMetricStream();
-            backgroundNotifLoopInstance = setInterval(pollNotificationsMetricStream, 12000);
+            backgroundNotifLoopInstance = setInterval(pollNotificationsMetricStream, 6000);
         }
 
         async function pollNotificationsMetricStream() {
             if (!sessionState) return;
             try {
+                // Compile notification logs
                 const res = await fetch(`${API_BASE_URL}/api/notifications/${sessionState.username}`);
                 if (!res.ok) return;
                 const notifs = await res.json();
@@ -576,8 +597,11 @@
                         if (alert.type === 'follow_request') messageContext = 'submitted a profile follow request.';
                         if (alert.type === 'message_request') messageContext = 'sent you a chat message authorization request.';
                         
+                        // Attached read removal interaction transaction loops
+                        row.onclick = () => clearIndividualAlertState(alert._id, alert.fromUser);
+
                         row.innerHTML = `
-                            <strong style="cursor:pointer;" onclick="viewProfileContext('${alert.fromUser}')">@${alert.fromUser}</strong> ${messageContext}
+                            <strong>@${alert.fromUser}</strong> ${messageContext}
                             <div class="notif-time-stamp">${new Date(alert.createdAt).toLocaleTimeString()}</div>
                         `;
                         container.appendChild(row);
@@ -586,9 +610,30 @@
                     badge.style.display = 'none';
                     container.innerHTML = '<p style="padding:16px; text-align:center; color:var(--steel-gray); font-size:0.8rem;">No recent notifications recorded.</p>';
                 }
+
+                // Poll unread chat threads summary counter
+                const chatRes = await fetch(`${API_BASE_URL}/api/messages/unread-summary/${sessionState.username}`);
+                if (chatRes.ok) {
+                    const chatSummary = await chatRes.json();
+                    const msgBadge = document.getElementById('msg-count-badge');
+                    if (chatSummary.unreadThreadsCount > 0) {
+                        msgBadge.innerText = chatSummary.unreadThreadsCount;
+                        msgBadge.style.display = 'inline-block';
+                    } else {
+                        msgBadge.style.display = 'none';
+                    }
+                }
             } catch (err) {
                 console.error("Alert verification polling block exception:", err);
             }
+        }
+
+        async function clearIndividualAlertState(notifId, originUser) {
+            try {
+                await fetch(`${API_BASE_URL}/api/notifications/${notifId}/read`, { method: 'POST' });
+                await pollNotificationsMetricStream();
+                viewProfileContext(originUser);
+            } catch (e) { console.error(e); }
         }
 
         function toggleNotificationsPane(event) {
@@ -612,6 +657,12 @@
 
             if (hoursPart >= 1) return `${hoursPart}h left`;
             return `${minutesPart}m left`;
+        }
+
+        function isPostExpiredCheck(createdAtString) {
+            if(!createdAtString) return true;
+            const absoluteExpirationDate = new Date(new Date(createdAtString).getTime() + (24 * 60 * 60 * 1000));
+            return (new Date() > absoluteExpirationDate);
         }
 
         function executeIntervalClocksRefresh() {
@@ -640,6 +691,20 @@
                 const dateStr = element.getAttribute('data-post-created-at');
                 element.innerText = calculateTimeRemainingText(dateStr);
             });
+
+            // Refresh top cooldown timer indicators fluidly
+            const ticker = document.getElementById('upload-cooldown-countdown-bar');
+            if (ticker && sessionState.activePost) {
+                const timeLeft = calculateTimeRemainingText(sessionState.activePost.createdAt);
+                if (timeLeft !== "Expired") {
+                    ticker.innerText = `⏱️ Upload Write-Lock Active — Next release in: ${timeLeft}`;
+                    ticker.style.display = "block";
+                } else {
+                    ticker.style.display = "none";
+                }
+            } else if (ticker) {
+                ticker.style.display = "none";
+            }
         }
 
         async function executeAdminPostPurge(postId) {
@@ -736,7 +801,6 @@
                     row.className = "search-result-profile-card";
                     row.style.borderLeft = "4px solid var(--system-blue)";
                     
-                    // LEADERBOARD VIEW PROFILE ROUTE INTERFACES LINK ATTACHED
                     row.innerHTML = `
                         <div>
                             <strong style="cursor:pointer;" onclick="viewProfileContext('${u.username}')">#${pos+1} ${u.fullName}</strong>
@@ -836,9 +900,28 @@
                     const ctx = hiddenCanvas.getContext('2d');
                     ctx.drawImage(imgElement, 0, 0, 150, 150);
                     pendingAvatarBase64 = hiddenCanvas.toDataURL('image/jpeg', 0.7);
-                    
-                    const frame = document.getElementById('avatar-preview-frame');
-                    frame.style.backgroundImage = `url('${pendingAvatarBase64}')`;
+                    document.getElementById('avatar-preview-frame').style.backgroundImage = `url('${pendingAvatarBase64}')`;
+                };
+            };
+            reader.readAsDataURL(targetFile);
+        }
+
+        // READ RECTANGULAR BACKDROP STREAM FROM MOBILE IMAGES ASSET STORAGE
+        function readLocalBannerAsset() {
+            const targetFile = document.getElementById('form-field-banner').files[0];
+            if (!targetFile) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgElement = new Image();
+                imgElement.src = e.target.result;
+                imgElement.onload = function() {
+                    const hiddenCanvas = document.createElement('canvas');
+                    hiddenCanvas.width = 900;
+                    hiddenCanvas.height = 300;
+                    const ctx = hiddenCanvas.getContext('2d');
+                    ctx.drawImage(imgElement, 0, 0, 900, 300);
+                    pendingBannerBase64 = hiddenCanvas.toDataURL('image/jpeg', 0.75);
+                    document.getElementById('banner-preview-frame').style.backgroundImage = `url('${pendingBannerBase64}')`;
                 };
             };
             reader.readAsDataURL(targetFile);
@@ -893,8 +976,119 @@
                     <button id="btn-like-${post._id}" class="reaction-node-trigger ${isLiked ? 'active-liked' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'like')">❤️ ${post.likes || 0}</button>
                     <button id="btn-medal-${post._id}" class="reaction-node-trigger ${isMedaled ? 'active-medaled' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'medal')">🥇 ${post.medals || 0}</button>
                     <button id="btn-broccoli-${post._id}" class="reaction-node-trigger ${isBroccolied ? 'active-broccolied' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'broccoli')">🥦 ${post.broccolis || 0}</button>
+                    <button class="reaction-node-trigger" onclick="event.stopPropagation(); toggleCommentsTrayDisplay('${post._id}', false)">💬 Discussion</button>
                 </div>
             `;
+        }
+
+        async function toggleCommentsTrayDisplay(postId, forceReadOnly) {
+            const block = document.getElementById(`comments-tray-${postId}`);
+            if (!block) return;
+            
+            if (block.style.display === "block") {
+                block.style.display = "none";
+            } else {
+                block.style.display = "block";
+                await loadPostCommentsLog(postId, 'likes', forceReadOnly);
+            }
+        }
+
+        async function loadPostCommentsLog(postId, sortingMode, forceReadOnly) {
+            const node = document.getElementById(`comments-stream-${postId}`);
+            if (!node) return;
+            node.innerHTML = '<p style="font-size:0.8rem; color:var(--steel-gray);">Synchronizing discussion records...</p>';
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/posts/${postId}/comments?sort=${sortingMode}`);
+                const structure = await res.json();
+                node.innerHTML = '';
+
+                if (structure.length === 0) {
+                    node.innerHTML = '<p style="font-size:0.8rem; color:var(--steel-gray); font-style:italic; padding:5px 0;">No comments logged under this post.</p>';
+                    return;
+                }
+
+                const rootNodes = structure.filter(c => !c.parentId);
+                const replyNodes = structure.filter(c => c.parentId);
+
+                function injectCommentTree(item, depthLevel) {
+                    const row = document.createElement('div');
+                    row.className = 'comment-node-card';
+                    row.style.marginLeft = `${depthLevel * 14}px`;
+                    
+                    let linkActionsMarkup = '';
+                    if (!forceReadOnly && !isPostExpiredCheck(item.createdAt)) {
+                        linkActionsMarkup = `
+                            <span class="comment-action-link" onclick="setupCommentReplyContext('${postId}', '${item._id}', '${item.username}')">↩ Reply</span> • 
+                            <span class="comment-action-link" onclick="dispatchCommentReaction('${postId}', '${item._id}', '${sortingMode}', forceReadOnly)">❤️ Like (${item.likes || 0})</span>
+                        `;
+                    } else {
+                        linkActionsMarkup = `<span style="color:var(--steel-gray);">❤️ Likes: ${item.likes || 0}</span>`;
+                    }
+
+                    row.innerHTML = `
+                        <div class="comment-node-meta">
+                            <span style="color:var(--text-color-primary);">@${item.username}</span>
+                            <span>${new Date(item.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div class="comment-node-text">${item.text}</div>
+                        <div class="comment-node-actions">${linkActionsMarkup}</div>
+                    `;
+                    node.appendChild(row);
+
+                    const children = replyNodes.filter(child => child.parentId === item._id);
+                    children.forEach(child => injectCommentTree(child, depthLevel + 1));
+                }
+
+                rootNodes.forEach(root => injectCommentTree(root, 0));
+            } catch (err) {
+                node.innerHTML = '<p style="color:#ef4444; font-size:0.8rem;">Failed to fetch channel conversations.</p>';
+            }
+        }
+
+        function setupCommentReplyContext(postId, commentId, handle) {
+            const inputField = document.getElementById(`comment-text-field-${postId}`);
+            if (!inputField) return;
+            inputField.value = `@${handle} `;
+            inputField.setAttribute('data-target-reply-id', commentId);
+            inputField.focus();
+        }
+
+        async function dispatchNewComment(postId, forceReadOnly) {
+            const field = document.getElementById(`comment-text-field-${postId}`);
+            if (!field || !field.value.trim()) return;
+
+            const text = field.value;
+            const parentId = field.getAttribute('data-target-reply-id') || null;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/posts/${postId}/comments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: sessionState.username, text, parentId })
+                });
+                const responseData = await res.json();
+                if (res.ok) {
+                    field.value = '';
+                    field.removeAttribute('data-target-reply-id');
+                    await loadPostCommentsLog(postId, 'likes', forceReadOnly);
+                } else {
+                    alert(responseData.error || 'Failed to register comment context entries.');
+                }
+            } catch(e) { alert('Transmission channel validation error.'); }
+        }
+
+        async function dispatchCommentReaction(postId, commentId, sortMode, forceReadOnly) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/comments/${commentId}/react`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: sessionState.username })
+                });
+                if (res.ok) {
+                    await loadPostCommentsLog(postId, sortMode, forceReadOnly);
+                }
+            } catch (e) { console.error(e); }
         }
 
         async function executeServerRegistration() {
@@ -911,7 +1105,6 @@
             if (res.ok) { alert("Registration completed successfully."); toggleAuthMode('signin'); } else { alert(data.error); }
         }
 
-        // UPGRADED AUTH RUNTIME INTERFACE HANDLER MECHANICS
         async function executeServerLogin() {
             const loginInput = document.getElementById('auth-signin-login').value.trim();
             const password = document.getElementById('auth-signin-pass').value;
@@ -921,7 +1114,6 @@
             const spinnerGraphic = document.getElementById('auth-btn-spinner-graphic');
             const submitBtn = document.getElementById('auth-signin-submit-btn');
 
-            // Toggle processing states cleanly on click parameter triggers
             errorBanner.style.display = 'none';
             staticText.style.display = 'none';
             spinnerGraphic.style.display = 'inline-block';
@@ -951,7 +1143,6 @@
                     initializeGlobalClocksDaemon();
                     startNotificationTrackingLoop();
                 } else {
-                    // Inject database response text error into validation slot
                     errorBanner.innerText = data.error || 'Incorrect credentials verification mismatch.';
                     errorBanner.style.display = 'block';
                 }
@@ -959,7 +1150,6 @@
                 errorBanner.innerText = 'Network request channel failed. Please verify pipeline links.';
                 errorBanner.style.display = 'block';
             } finally {
-                // Restore interactive elements following processing verification loops
                 staticText.style.display = 'inline';
                 spinnerGraphic.style.display = 'none';
                 submitBtn.disabled = false;
@@ -1037,10 +1227,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="image-display-area" style="background-image:url('${post.img}')" onclick="event.stopPropagation(); triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')})"></div>
+                    <div class="image-display-area" style="background-image:url('${post.img}')" onclick="event.stopPropagation(); triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')}, false)"></div>
                     <div class="tag-pill-container">${tagsMarkup}</div>
                     <div class="caption-text-block">${post.caption}</div>
                     ${generateReactionToolbar(post)}
+                    
+                    <div class="comments-section-container" id="comments-tray-${post._id}">
+                        <div style="margin-bottom:12px; display:flex; gap:8px; align-items:center;">
+                            <span style="font-size:0.8rem; font-weight:bold; color:var(--steel-gray);">Filter:</span>
+                            <select style="width:auto; padding:4px 8px; font-size:0.8rem; margin-bottom:0;" onchange="loadPostCommentsLog('${post._id}', this.value, false)">
+                                <option value="likes">Top Liked</option>
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
+                        </div>
+                        <div id="comments-stream-${post._id}" style="max-height:280px; overflow-y:auto; margin-bottom:12px;"></div>
+                        <div style="display:flex; gap:8px;">
+                            <input type="text" id="comment-text-field-${post._id}" placeholder="Add your comment..." style="margin-bottom:0; padding:8px 12px; font-size:0.9rem;">
+                            <button class="dm-send-btn" style="padding:0 15px;" onclick="dispatchNewComment('${post._id}', false)">Post</button>
+                        </div>
+                    </div>
                 `;
                 displayNode.appendChild(card);
             });
@@ -1131,7 +1337,7 @@
                             <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">${calculateTimeRemainingText(post.createdAt)}</div>
                         </div>
                     </div>
-                    <div class="image-display-area" style="background-image:url('${post.img}'); height:260px;" onclick="triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')})"></div>
+                    <div class="image-display-area" style="background-image:url('${post.img}'); height:260px;" onclick="triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')}, false)"></div>
                     <div class="tag-pill-container">${elements}</div>
                     <div class="caption-text-block">${post.caption}</div>
                     ${generateReactionToolbar(post)}
@@ -1154,18 +1360,13 @@
                 body: JSON.stringify({
                     username: sessionState.username, fullName, bio, isPrivate, allowMessagesFrom, pgFriendly, darkMode,
                     avatarString: pendingAvatarBase64 || sessionState.avatarString,
+                    bannerString: pendingBannerBase64 || sessionState.bannerString, // Include canvas backdrop strings
                     age: sessionState.age, status: sessionState.status, country: sessionState.country, hideFollowersList: sessionState.hideFollowersList
                 })
             });
             const data = await res.json();
             if (res.ok) {
-                sessionState.fullName = data.user.fullName;
-                sessionState.bio = data.user.bio;
-                sessionState.isPrivate = data.user.isPrivate;
-                sessionState.allowMessagesFrom = data.user.allowMessagesFrom;
-                sessionState.avatarString = data.user.avatarString;
-                sessionState.pgFriendly = data.user.pgFriendly;
-                sessionState.darkMode = data.user.darkMode;
+                sessionState = data.user;
                 localStorage.setItem('silvershot_session_node', JSON.stringify(sessionState));
                 alert("Profile updates saved.");
                 
@@ -1174,10 +1375,26 @@
             }
         }
 
-        function triggerEnlargedPostViewModal(item) {
+        function triggerEnlargedPostViewModal(item, isArchivedSlot) {
             let tagsMarkup = '';
             if(item.hashtags) {
                 item.hashtags.forEach(t => { tagsMarkup += `<span class="tag-pill">#${t}</span>`; });
+            }
+
+            let responseInputBox = '';
+            if (!isArchivedSlot && !isPostExpiredCheck(item.createdAt)) {
+                responseInputBox = `
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="comment-text-field-${item._id}" placeholder="Add your comment..." style="margin-bottom:0; padding:8px 12px; font-size:0.9rem;">
+                        <button class="dm-send-btn" style="padding:0 15px;" onclick="dispatchNewComment('${item._id}', false)">Post</button>
+                    </div>
+                `;
+            } else {
+                responseInputBox = `
+                    <div style="padding:10px; background:rgba(0,0,0,0.03); border-radius:8px; font-size:0.85rem; color:var(--steel-gray); font-style:italic; text-align:center;">
+                        🔒 Present discussion log is archived. New entries or reactions are locked.
+                    </div>
+                `;
             }
 
             document.getElementById('lightbox-post-render-area').innerHTML = `
@@ -1189,9 +1406,35 @@
                         </div>
                         <div class="post-lifespan-badge">${item.createdAt ? calculateTimeRemainingText(item.createdAt) : 'Showcase Gallery'}</div>
                     </div>
-                    <div class="image-display-area" style="background-image:url('${item.img}'); height:450px; cursor:default;"></div>
+                    <div class="image-display-area" style="background-image:url('${item.img}'); height:340px; cursor:default;"></div>
                     <div class="tag-pill-container">${tagsMarkup}</div>
-                    <p class="caption-text-block" style="color:var(--text-color-primary);">${item.caption}</p>
+                    <p class="caption-text-block" style="color:var(--text-color-primary); margin-bottom:15px;">${item.caption}</p>
+                    
+                    <div style="border-top:1px solid var(--card-border); padding-top:15px;">
+                        <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:0.85rem; font-weight:bold;">Discussion Logs</span>
+                            <select style="width:auto; padding:2px 6px; font-size:0.75rem; margin-bottom:0;" onchange="loadPostCommentsLog('${item._id}', this.value, ${isArchivedSlot})">
+                                <option value="likes">Top Liked</option>
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
+                        </div>
+                        <div id="comments-stream-${item._id}" style="max-height:200px; overflow-y:auto; margin-bottom:12px;"></div>
+                        ${responseInputBox}
+                    </div>
+                </div>
+            `;
+            document.getElementById('global-lightbox-overlay').style.display = 'flex';
+            loadPostCommentsLog(item._id, 'likes', isArchivedSlot);
+        }
+
+        // TRIGGER ENLARGED FULL-RESOLUTION VIEW MODAL FOR PERSONAL PIX LABELS
+        function triggerEnlargedAvatarViewModal(imgSrc, usernameInitial) {
+            const innerGraphic = imgSrc ? `<img src="${imgSrc}" style="width:100%; border-radius:24px; max-height:75vh; object-fit:contain;">` : `<div style="height:250px; width:250px; border-radius:50%; background:var(--dark-slate); color:white; display:flex; align-items:center; justify-content:center; font-size:5rem; font-weight:bold; margin:auto;">${usernameInitial}</div>`;
+            document.getElementById('lightbox-post-render-area').innerHTML = `
+                <div style="text-align:center; padding:20px;">
+                    <h3 style="margin-bottom:15px; color:var(--text-color-primary);">Profile Avatar View</h3>
+                    ${innerGraphic}
                 </div>
             `;
             document.getElementById('global-lightbox-overlay').style.display = 'flex';
@@ -1207,7 +1450,6 @@
             blockedListContainer.innerHTML = '';
 
             if (target === 'self' || target.toLowerCase() === sessionState.username.toLowerCase()) {
-                
                 try {
                     const res = await fetch(`${API_BASE_URL}/api/profile/${sessionState.username}`);
                     if (res.ok) {
@@ -1232,6 +1474,7 @@
                 }
 
                 pendingAvatarBase64 = null;
+                pendingBannerBase64 = null;
                 document.getElementById('form-field-fullname-input').value = contextData.fullName || '';
                 document.getElementById('form-field-bio').value = contextData.bio || '';
                 document.getElementById('form-field-privacy').value = contextData.isPrivate ? 'private' : 'public';
@@ -1239,8 +1482,8 @@
                 document.getElementById('form-field-pg-toggle').checked = contextData.pgFriendly || false;
                 document.getElementById('form-field-dark-toggle').checked = contextData.darkMode || false;
                 
-                const frame = document.getElementById('avatar-preview-frame');
-                frame.style.backgroundImage = contextData.avatarString ? `url('${contextData.avatarString}')` : 'none';
+                document.getElementById('avatar-preview-frame').style.backgroundImage = contextData.avatarString ? `url('${contextData.avatarString}')` : 'none';
+                document.getElementById('banner-preview-frame').style.backgroundImage = contextData.bannerString ? `url('${contextData.bannerString}')` : 'none';
 
                 if (contextData.blockedUsers && contextData.blockedUsers.length > 0) {
                     contextData.blockedUsers.forEach(blockedUser => {
@@ -1341,6 +1584,17 @@
                 buttonSlot.appendChild(messageBtn);
             }
 
+            // Sync rectangular background banner images data node elements
+            const coverCanvas = document.getElementById('label-profile-banner-bg');
+            if (contextData.bannerString) {
+                coverCanvas.style.backgroundImage = `url('${contextData.bannerString}')`;
+                coverCanvas.style.backgroundSize = "cover";
+                coverCanvas.style.backgroundPosition = "center";
+            } else {
+                coverCanvas.style.backgroundImage = "none";
+                coverCanvas.style.background = "linear-gradient(90deg, #94a3b8 0%, #475569 100%)";
+            }
+
             const bigAvatarNode = document.getElementById('label-avatar-symbol');
             if (contextData.avatarString) {
                 bigAvatarNode.style.backgroundImage = `url('${contextData.avatarString}')`;
@@ -1350,6 +1604,9 @@
                 bigAvatarNode.style.color = 'white';
                 bigAvatarNode.innerText = contextData.username.charAt(0).toUpperCase();
             }
+            
+            // Map out zooming functionality to enlarge the profile picture seamlessly
+            bigAvatarNode.onclick = () => triggerEnlargedAvatarViewModal(contextData.avatarString, contextData.username.charAt(0).toUpperCase());
 
             document.getElementById('label-profile-fullname').innerText = contextData.fullName;
             document.getElementById('label-profile-handle').innerText = '@' + contextData.username;
@@ -1370,7 +1627,7 @@
                     slot.className = "hall-of-fame-slot";
                     slot.style.backgroundImage = `url('${item.img}')`;
                     slot.innerHTML = `<div class="hall-of-fame-badge">❤️ ${item.likes}</div>`;
-                    slot.onclick = () => triggerEnlargedPostViewModal(item);
+                    slot.onclick = () => triggerEnlargedPostViewModal(item, true);
                 } else {
                     slot.className = "hall-of-fame-slot hall-slot-vacant";
                     slot.innerText = "Empty Slot";
@@ -1386,9 +1643,10 @@
                         <p style="font-size:0.95rem; font-weight:500; margin-bottom:8px;">${contextData.activePost.caption}</p>
                     </div>
                 `;
-                activePostSlot.firstElementChild.onclick = () => triggerEnlargedPostViewModal(contextData.activePost);
+                activePostSlot.firstElementChild.onclick = () => triggerEnlargedPostViewModal(contextData.activePost, false);
             } else { activePostSlot.innerHTML = `<p style="font-size:0.85rem; color:var(--steel-gray); font-style:italic; margin-top:15px;">No active post uploaded.</p>`; }
 
+            executeIntervalClocksRefresh();
             navigateToPanel('profile');
         }
 
@@ -1397,16 +1655,28 @@
         async function buildChatThreadsSidebar() {
             const baseNode = document.getElementById('dm-active-threads-list');
             baseNode.innerHTML = '<h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:10px;">Channels</h4>';
-            if (sessionState.following && sessionState.following.length > 0) {
-                sessionState.following.forEach(user => {
-                    const row = document.createElement('div');
-                    row.className = "dm-user-row";
-                    row.id = `dm-row-${user.toLowerCase()}`;
-                    row.innerText = '@' + user;
-                    row.onclick = () => launchActiveChatThreadChannel(user);
-                    baseNode.appendChild(row);
-                });
-            } else { baseNode.innerHTML += '<p style="font-size:0.8rem; color:var(--steel-gray); font-style:italic;">No active chat connections found.</p>'; }
+            
+            try {
+                // Fetch dynamic unread tracking summary lists before sidebar generation passes
+                const chatRes = await fetch(`${API_BASE_URL}/api/messages/unread-summary/${sessionState.username}`);
+                const summaryData = chatRes.ok ? await chatRes.json() : { senders: [] };
+
+                if (sessionState.following && sessionState.following.length > 0) {
+                    sessionState.following.forEach(user => {
+                        const row = document.createElement('div');
+                        row.className = "dm-user-row";
+                        row.id = `dm-row-${user.toLowerCase()}`;
+                        
+                        // Map unread marker status indicators directly to rows
+                        const holdsUnread = summaryData.senders.includes(user.toLowerCase());
+                        const badgeMarkup = holdsUnread ? `<span style="background:#2563eb; color:white; font-size:0.7rem; padding:2px 6px; border-radius:10px; font-weight:bold;">1</span>` : '';
+                        
+                        row.innerHTML = `<span>@${user}</span> ${badgeMarkup}`;
+                        row.onclick = () => launchActiveChatThreadChannel(user);
+                        baseNode.appendChild(row);
+                    });
+                } else { baseNode.innerHTML += '<p style="font-size:0.8rem; color:var(--steel-gray); font-style:italic;">No active chat connections found.</p>'; }
+            } catch(e) { console.error(e); }
         }
 
         function launchActiveChatThreadChannel(username) {
@@ -1414,7 +1684,12 @@
             document.querySelectorAll('.dm-user-row').forEach(r => r.classList.remove('active'));
             
             const targetRow = document.getElementById(`dm-row-${activeChatPartner}`);
-            if (targetRow) targetRow.classList.add('active');
+            if (targetRow) {
+                targetRow.classList.add('active');
+                // Remove numeric indicator row parameters safely on opened channel threads
+                const indicator = targetRow.querySelector('span:nth-child(2)');
+                if(indicator) indicator.remove();
+            }
 
             const channelHeader = document.getElementById('dm-active-channel-header');
             channelHeader.innerHTML = `Viewing Channel: <span style="text-decoration:underline; cursor:pointer; color:var(--system-blue);" onclick="viewProfileContext('${activeChatPartner}')">@${activeChatPartner}</span>`;
@@ -1436,7 +1711,14 @@
                 const item = document.createElement('div');
                 const flowDir = msg.sender.toLowerCase() === sessionState.username.toLowerCase() ? 'sent' : 'received';
                 item.className = `chat-bubble ${flowDir}`;
-                item.innerText = msg.text;
+                
+                // Mapped receipt tokens directly onto sender data bubbles
+                let receiptString = '';
+                if (flowDir === 'sent' && msg.isRead) {
+                    receiptString = `<span style="font-size:0.65rem; color:#94a3b8; display:block; text-align:right; margin-top:4px; font-weight:bold;">✓ Read</span>`;
+                }
+
+                item.innerHTML = `<div>${msg.text}</div>${receiptString}`;
                 scrollBox.appendChild(item);
             });
             scrollBox.scrollTop = scrollBox.scrollHeight;
