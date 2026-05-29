@@ -91,7 +91,7 @@
         .user-info-text h5:hover { text-decoration: underline; }
         .user-info-text h6 { font-size: 0.8rem; color: var(--steel-gray); font-weight: 500; }
         
-        .post-meta-right-tray { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .post-meta-right-tray { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .post-lifespan-badge { background: rgba(0,0,0,0.05); font-size: 0.75rem; font-weight: 700; padding: 6px 12px; border-radius: 12px; color: var(--steel-gray); }
         body.dark-theme-active .post-lifespan-badge { background: rgba(255,255,255,0.05); }
 
@@ -113,11 +113,11 @@
         .reaction-node-trigger.active-broccolied { background: #dcfce7; color: #16a34a; }
 
         .comments-section-container { margin-top: 15px; border-top: 1px solid var(--card-border); padding-top: 15px; display: none; }
-        .comment-node-card { border-left: 2px solid var(--steel-gray); padding-left: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.01); padding-top: 6px; padding-bottom: 6px; }
+        .comment-node-card { border-left: 2px solid var(--steel-gray); padding-left: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.01); padding-top: 6px; padding-bottom: 6px; display: flex; flex-direction: column; gap: 4px; }
         body.dark-theme-active .comment-node-card { background: rgba(255,255,255,0.01); }
-        .comment-node-meta { font-size: 0.8rem; font-weight: bold; display: flex; gap: 10px; color: var(--steel-gray); margin-bottom: 4px; }
+        .comment-node-meta { font-size: 0.8rem; font-weight: bold; display: flex; gap: 10px; color: var(--steel-gray); margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
         .comment-node-text { font-size: 0.9rem; line-height: 1.4; color: var(--text-color-primary); margin-bottom: 6px; }
-        .comment-node-actions { display: flex; gap: 12px; font-size: 0.75rem; font-weight: bold; }
+        .comment-node-actions { display: flex; gap: 12px; font-size: 0.75rem; font-weight: bold; align-items: center; }
         .comment-action-link { cursor: pointer; color: var(--steel-gray); text-decoration: none; }
         .comment-action-link:hover { text-decoration: underline; }
 
@@ -174,11 +174,9 @@
         .settings-toggle-btn { background: rgba(0,0,0,0.05); border: none; color: var(--text-color-primary); font-size: 0.85rem; font-weight: bold; padding: 8px 16px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
         body.dark-theme-active .settings-toggle-btn { background: rgba(255, 255, 255, 0.05); }
 
-        /* RESTRUCTURED SYMMETRICAL PROFILE HERO BANNER PANELS */
         .profile-hero-banner-card { background: var(--card-background); border: 1px solid var(--card-border); border-radius: 24px; overflow: hidden; margin-bottom: 30px; position: relative; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.01); text-align: center; }
         .profile-cover-canvas { height: 210px; background: linear-gradient(90deg, #94a3b8 0%, #475569 100%); width: 100%; background-size: cover; background-position: center; }
         
-        /* COOLDOWN TIMELINE HUD LAYER BANNER STATUS INDICATOR */
         .upload-cooldown-ticker-bar { width: 100%; background: rgba(15,23,42,0.85); color: #cbd5e1; font-size: 0.75rem; font-weight: bold; padding: 6px 0; text-align: center; letter-spacing: 0.5px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
 
         .profile-details-pane { padding: 0 24px 30px 24px; text-align: center; position: relative; }
@@ -217,7 +215,7 @@
             header { padding: 12px 0; margin-bottom: 20px; }
             .header-grid { flex-direction: column; text-align: center; }
             nav { justify-content: center; }
-            .profile-details-pane { padding: 0 16px 24px 16px; }
+            .profile-details-pane { padding: 0 20px 20px 20px; }
             .form-layout-box { padding: 24px; }
             .image-display-area { height: 320px; }
         }
@@ -266,8 +264,8 @@
                 <nav>
                     <button class="nav-button active" id="nav-btn-feed" onclick="navigateToPanel('feed')">🗺️ Timelines</button>
                     <button class="nav-button" id="nav-btn-search" onclick="navigateToPanel('search')">🔍 Search</button>
-                    <button class="nav-button" id="nav-btn-upload" onclick="navigateToPanel('upload')">📸 Upload</button>
                     
+                    <button class="nav-button" id="nav-btn-upload" onclick="navigateToPanel('upload')">📸 Upload <span id="nav-upload-cooldown-badge" style="background:#eab308; color:#0f172a; font-size:0.65rem; padding:2px 5px; border-radius:8px; font-weight:bold; display:none;">🔒 LOCK</span></button>
                     <button class="nav-button" id="nav-btn-messages" onclick="navigateToPanel('messages')">💬 Messages <span id="msg-count-badge" class="notif-trigger-badge" style="display:none; background:#2563eb;">0</span></button>
                     <button class="nav-button" id="nav-btn-profile" onclick="viewProfileContext('self')">👤 Profile</button>
                     
@@ -328,37 +326,42 @@
             <div id="view-panel-upload" class="view-panel">
                 <div class="form-layout-box">
                     <h3>Upload Post</h3>
-                    <div class="alert-banner-info">
-                        Select a ratio and crop your image before uploading your post.
-                    </div>
                     
-                    <label>Select File</label>
-                    <input type="file" id="input-graphic-file" accept="image/*" onchange="initializeCropAssetPipeline()">
-                    
-                    <div class="crop-workbench-frame" id="crop-preview-frame">
-                        <img id="crop-source-buffer" class="crop-source-element" alt="Buffer">
+                    <div id="upload-panel-lock-banner" class="alert-banner-info" style="background:#fffbeb; border-color:#fef3c7; color:#b45309; display:none; font-weight:600; text-align:center;"></div>
+
+                    <div id="upload-form-controls-wrapper">
+                        <div class="alert-banner-info">
+                            Select a ratio and crop your image before uploading your post.
+                        </div>
+                        
+                        <label>Select File</label>
+                        <input type="file" id="input-graphic-file" accept="image/*" onchange="initializeCropAssetPipeline()">
+                        
+                        <div class="crop-workbench-frame" id="crop-preview-frame">
+                            <img id="crop-source-buffer" class="crop-source-element" alt="Buffer">
+                        </div>
+
+                        <label>Aspect Ratio</label>
+                        <div class="ratio-control-row">
+                            <button class="ratio-btn active-ratio" id="ratio-btn-1-1" onclick="modifyCropBorderRatio(1, 1, '1-1')">Square (1:1)</button>
+                            <button class="ratio-btn" id="ratio-btn-4-5" onclick="modifyCropBorderRatio(4, 5, '4-5')">Portrait (4:5)</button>
+                            <button class="ratio-btn" id="ratio-btn-16-9" onclick="modifyCropBorderRatio(16, 9, '16-9')">Widescreen (16:9)</button>
+                        </div>
+
+                        <label>Category</label>
+                        <select id="input-graphic-topic">
+                            <option value="General">General</option>
+                            <option value="Sports">Sports</option>
+                            <option value="News">News</option>
+                            <option value="Tech">Tech</option>
+                        </select>
+
+                        <label>Description Caption</label>
+                        <textarea id="input-graphic-caption" placeholder="Describe the post... Include #Tags" maxlength="300" rows="4" oninput="monitorTextLength()"></textarea>
+                        <div class="character-indicator" id="text-length-indicator">0 / 300 Characters</div>
+
+                        <button class="action-submit-trigger" onclick="dispatchImageUploadToServer()">Upload</button>
                     </div>
-
-                    <label>Aspect Ratio</label>
-                    <div class="ratio-control-row">
-                        <button class="ratio-btn active-ratio" id="ratio-btn-1-1" onclick="modifyCropBorderRatio(1, 1, '1-1')">Square (1:1)</button>
-                        <button class="ratio-btn" id="ratio-btn-4-5" onclick="modifyCropBorderRatio(4, 5, '4-5')">Portrait (4:5)</button>
-                        <button class="ratio-btn" id="ratio-btn-16-9" onclick="modifyCropBorderRatio(16, 9, '16-9')">Widescreen (16:9)</button>
-                    </div>
-
-                    <label>Category</label>
-                    <select id="input-graphic-topic">
-                        <option value="General">General</option>
-                        <option value="Sports">Sports</option>
-                        <option value="News">News</option>
-                        <option value="Tech">Tech</option>
-                    </select>
-
-                    <label>Description Caption</label>
-                    <textarea id="input-graphic-caption" placeholder="Describe the post... Include #Tags" maxlength="300" rows="4" oninput="monitorTextLength()"></textarea>
-                    <div class="character-indicator" id="text-length-indicator">0 / 300 Characters</div>
-
-                    <button class="action-submit-trigger" onclick="dispatchImageUploadToServer()">Upload</button>
                 </div>
             </div>
 
@@ -494,7 +497,7 @@
         let systemFeedOrderingMode = "fyp";
         let structuralBase64String = "";
         let pendingAvatarBase64 = null;
-        let pendingBannerBase64 = null; // Background asset state block
+        let pendingBannerBase64 = null;
         let activeChatPartner = null;
         let activeChatInterval = null;
         let globalClockDaemonInstance = null;
@@ -569,10 +572,22 @@
             backgroundNotifLoopInstance = setInterval(pollNotificationsMetricStream, 6000);
         }
 
+        // DEVICE CHRONOLOGICAL CALCULATION MATRIX RUNTIME FOR COMMENTS TRACKING
+        function calculateRelativeTimeText(dateString) {
+            if (!dateString) return "just now";
+            const delta = Math.floor((new Date() - new Date(dateString)) / 1000);
+            if (delta < 60) return "just now";
+            const minutes = Math.floor(delta / 60);
+            if (minutes < 60) return `${minutes}m ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours}h ago`;
+            const days = Math.floor(hours / 24);
+            return `${days}d ago`;
+        }
+
         async function pollNotificationsMetricStream() {
             if (!sessionState) return;
             try {
-                // Compile notification logs
                 const res = await fetch(`${API_BASE_URL}/api/notifications/${sessionState.username}`);
                 if (!res.ok) return;
                 const notifs = await res.json();
@@ -597,7 +612,6 @@
                         if (alert.type === 'follow_request') messageContext = 'submitted a profile follow request.';
                         if (alert.type === 'message_request') messageContext = 'sent you a chat message authorization request.';
                         
-                        // Attached read removal interaction transaction loops
                         row.onclick = () => clearIndividualAlertState(alert._id, alert.fromUser);
 
                         row.innerHTML = `
@@ -611,7 +625,6 @@
                     container.innerHTML = '<p style="padding:16px; text-align:center; color:var(--steel-gray); font-size:0.8rem;">No recent notifications recorded.</p>';
                 }
 
-                // Poll unread chat threads summary counter
                 const chatRes = await fetch(`${API_BASE_URL}/api/messages/unread-summary/${sessionState.username}`);
                 if (chatRes.ok) {
                     const chatSummary = await chatRes.json();
@@ -692,18 +705,35 @@
                 element.innerText = calculateTimeRemainingText(dateStr);
             });
 
-            // Refresh top cooldown timer indicators fluidly
             const ticker = document.getElementById('upload-cooldown-countdown-bar');
-            if (ticker && sessionState.activePost) {
+            const navUploadBadge = document.getElementById('nav-upload-cooldown-badge');
+            const panelLockBanner = document.getElementById('upload-panel-lock-banner');
+            const uploadControlsWrapper = document.getElementById('upload-form-controls-wrapper');
+
+            if (sessionState.activePost) {
                 const timeLeft = calculateTimeRemainingText(sessionState.activePost.createdAt);
                 if (timeLeft !== "Expired") {
-                    ticker.innerText = `⏱️ Upload Write-Lock Active — Next release in: ${timeLeft}`;
-                    ticker.style.display = "block";
+                    if(ticker) {
+                        ticker.innerText = `⏱️ Upload Write-Lock Active — Next release in: ${timeLeft}`;
+                        ticker.style.display = "block";
+                    }
+                    if(navUploadBadge) navUploadBadge.style.display = "inline-block";
+                    if(panelLockBanner) {
+                        panelLockBanner.innerText = `🔒 Uploading is locked. You have an active post currently streaming on the network timeline. Cooldown resets in: ${timeLeft}`;
+                        panelLockBanner.style.display = "block";
+                    }
+                    if(uploadControlsWrapper) uploadControlsWrapper.style.display = "none";
                 } else {
-                    ticker.style.display = "none";
+                    if(ticker) ticker.style.display = "none";
+                    if(navUploadBadge) navUploadBadge.style.display = "none";
+                    if(panelLockBanner) panelLockBanner.style.display = "none";
+                    if(uploadControlsWrapper) uploadControlsWrapper.style.display = "block";
                 }
-            } else if (ticker) {
-                ticker.style.display = "none";
+            } else {
+                if(ticker) ticker.style.display = "none";
+                if(navUploadBadge) navUploadBadge.style.display = "none";
+                if(panelLockBanner) panelLockBanner.style.display = "none";
+                if(uploadControlsWrapper) uploadControlsWrapper.style.display = "block";
             }
         }
 
@@ -906,7 +936,6 @@
             reader.readAsDataURL(targetFile);
         }
 
-        // READ RECTANGULAR BACKDROP STREAM FROM MOBILE IMAGES ASSET STORAGE
         function readLocalBannerAsset() {
             const targetFile = document.getElementById('form-field-banner').files[0];
             if (!targetFile) return;
@@ -965,7 +994,7 @@
             } catch(e) { alert("Failed to complete reaction metrics update verification."); }
         }
 
-        function generateReactionToolbar(post) {
+        function generateReactionToolbar(post, isArchivedSlot) {
             const userHandle = sessionState.username.toLowerCase();
             const isLiked = post.likedBy && post.likedBy.includes(userHandle);
             const isMedaled = post.medaledBy && post.medaledBy.includes(userHandle);
@@ -976,7 +1005,7 @@
                     <button id="btn-like-${post._id}" class="reaction-node-trigger ${isLiked ? 'active-liked' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'like')">❤️ ${post.likes || 0}</button>
                     <button id="btn-medal-${post._id}" class="reaction-node-trigger ${isMedaled ? 'active-medaled' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'medal')">🥇 ${post.medals || 0}</button>
                     <button id="btn-broccoli-${post._id}" class="reaction-node-trigger ${isBroccolied ? 'active-broccolied' : ''}" onclick="event.stopPropagation(); triggerReactionUpdate('${post._id}', 'broccoli')">🥦 ${post.broccolis || 0}</button>
-                    <button class="reaction-node-trigger" onclick="event.stopPropagation(); toggleCommentsTrayDisplay('${post._id}', false)">💬 Discussion</button>
+                    <button class="reaction-node-trigger" onclick="event.stopPropagation(); toggleCommentsTrayDisplay('${post._id}', ${isArchivedSlot})">💬 Discussion (${post.commentCount || 0})</button>
                 </div>
             `;
         }
@@ -1017,19 +1046,25 @@
                     row.style.marginLeft = `${depthLevel * 14}px`;
                     
                     let linkActionsMarkup = '';
+                    const hasLikedComment = item.likedBy && item.likedBy.includes(sessionState.username.toLowerCase());
+                    
                     if (!forceReadOnly && !isPostExpiredCheck(item.createdAt)) {
                         linkActionsMarkup = `
                             <span class="comment-action-link" onclick="setupCommentReplyContext('${postId}', '${item._id}', '${item.username}')">↩ Reply</span> • 
-                            <span class="comment-action-link" onclick="dispatchCommentReaction('${postId}', '${item._id}', '${sortingMode}', forceReadOnly)">❤️ Like (${item.likes || 0})</span>
+                            <button class="reaction-node-trigger ${hasLikedComment ? 'active-liked' : ''}" style="border-radius:50%; width:28px; height:28px; padding:0; display:inline-flex; align-items:center; justify-content:center; border:none; cursor:pointer;" onclick="dispatchCommentReaction('${postId}', '${item._id}', '${sortingMode}', ${forceReadOnly})">❤️</button>
+                            <span style="font-size:0.75rem; color:var(--steel-gray); font-weight:bold; margin-left:2px;">${item.likes || 0}</span>
                         `;
                     } else {
-                        linkActionsMarkup = `<span style="color:var(--steel-gray);">❤️ Likes: ${item.likes || 0}</span>`;
+                        linkActionsMarkup = `
+                            <button class="reaction-node-trigger ${hasLikedComment ? 'active-liked' : ''}" style="border-radius:50%; width:28px; height:28px; padding:0; display:inline-flex; align-items:center; justify-content:center; border:none; cursor:default;" disabled>❤️</button>
+                            <span style="font-size:0.75rem; color:var(--steel-gray); font-weight:bold; margin-left:2px;">${item.likes || 0}</span>
+                        `;
                     }
 
                     row.innerHTML = `
                         <div class="comment-node-meta">
                             <span style="color:var(--text-color-primary);">@${item.username}</span>
-                            <span>${new Date(item.createdAt).toLocaleDateString()}</span>
+                            <span style="color:var(--steel-gray); font-weight:500;">${calculateRelativeTimeText(item.createdAt)}</span>
                         </div>
                         <div class="comment-node-text">${item.text}</div>
                         <div class="comment-node-actions">${linkActionsMarkup}</div>
@@ -1072,8 +1107,11 @@
                     field.value = '';
                     field.removeAttribute('data-target-reply-id');
                     await loadPostCommentsLog(postId, 'likes', forceReadOnly);
+                    
+                    // Refresh parent context count displays
+                    if(panelId === 'feed') renderFeedStreamTimeline();
                 } else {
-                    alert(responseData.error || 'Failed to register comment context entries.');
+                    alert(responseData.error || 'Failed to register comment entries.');
                 }
             } catch(e) { alert('Transmission channel validation error.'); }
         }
@@ -1089,20 +1127,6 @@
                     await loadPostCommentsLog(postId, sortMode, forceReadOnly);
                 }
             } catch (e) { console.error(e); }
-        }
-
-        async function executeServerRegistration() {
-            const username = document.getElementById('auth-signup-username').value.trim();
-            const email = document.getElementById('auth-signup-email').value.trim();
-            const password = document.getElementById('auth-signup-pass').value;
-
-            const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password })
-            });
-            const data = await res.json();
-            if (res.ok) { alert("Registration completed successfully."); toggleAuthMode('signin'); } else { alert(data.error); }
         }
 
         async function executeServerLogin() {
@@ -1177,6 +1201,7 @@
 
             if (panelId === 'feed') renderFeedStreamTimeline();
             if (panelId === 'messages') buildChatThreadsSidebar();
+            executeIntervalClocksRefresh();
         }
 
         async function renderFeedStreamTimeline() {
@@ -1210,6 +1235,10 @@
                     adminControlMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Delete Post (Admin)</button>`;
                 }
 
+                // ABSOLUTE DATETIME PLACED IN THE CARD HEADER
+                const creationStamp = new Date(post.createdAt);
+                const displayDateString = creationStamp.toLocaleDateString() + ' ' + creationStamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
                 card.innerHTML = `
                     <div class="post-header">
                         <div class="post-header-left">
@@ -1222,6 +1251,7 @@
                         <div class="post-meta-right-tray">
                             ${adminControlMarkup}
                             <button class="nav-button" style="padding:4px 8px; font-size:0.75rem; background:rgba(0,0,0,0.05);" onclick="event.stopPropagation(); executeBlockProfileTransaction('${post.username}')">🚫 Block</button>
+                            <span style="font-size:0.75rem; color:var(--steel-gray); font-weight:600;">${displayDateString}</span>
                             <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">
                                 ${calculateTimeRemainingText(post.createdAt)}
                             </div>
@@ -1230,7 +1260,7 @@
                     <div class="image-display-area" style="background-image:url('${post.img}')" onclick="event.stopPropagation(); triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')}, false)"></div>
                     <div class="tag-pill-container">${tagsMarkup}</div>
                     <div class="caption-text-block">${post.caption}</div>
-                    ${generateReactionToolbar(post)}
+                    ${generateReactionToolbar(post, false)}
                     
                     <div class="comments-section-container" id="comments-tray-${post._id}">
                         <div style="margin-bottom:12px; display:flex; gap:8px; align-items:center;">
@@ -1326,6 +1356,9 @@
                     postAdminMarkup = `<button class="admin-danger-purge-btn" onclick="event.stopPropagation(); executeAdminPostPurge('${post._id}')">🗑️ Delete Post (Admin)</button>`;
                 }
 
+                const postStamp = new Date(post.createdAt);
+                const displayPostDate = postStamp.toLocaleDateString() + ' ' + postStamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
                 container.innerHTML = `
                     <div class="post-header">
                         <div class="post-header-left">
@@ -1334,13 +1367,14 @@
                         </div>
                         <div class="post-meta-right-tray">
                             ${postAdminMarkup}
+                            <span style="font-size:0.75rem; color:var(--steel-gray); font-weight:600;">${displayPostDate}</span>
                             <div class="post-lifespan-badge" data-post-created-at="${post.createdAt}">${calculateTimeRemainingText(post.createdAt)}</div>
                         </div>
                     </div>
                     <div class="image-display-area" style="background-image:url('${post.img}'); height:260px;" onclick="triggerEnlargedPostViewModal(${JSON.stringify(post).replace(/"/g, '&quot;')}, false)"></div>
                     <div class="tag-pill-container">${elements}</div>
                     <div class="caption-text-block">${post.caption}</div>
-                    ${generateReactionToolbar(post)}
+                    ${generateReactionToolbar(post, false)}
                 `;
                 streamSlot.appendChild(container);
             });
@@ -1360,7 +1394,7 @@
                 body: JSON.stringify({
                     username: sessionState.username, fullName, bio, isPrivate, allowMessagesFrom, pgFriendly, darkMode,
                     avatarString: pendingAvatarBase64 || sessionState.avatarString,
-                    bannerString: pendingBannerBase64 || sessionState.bannerString, // Include canvas backdrop strings
+                    bannerString: pendingBannerBase64 || sessionState.bannerString,
                     age: sessionState.age, status: sessionState.status, country: sessionState.country, hideFollowersList: sessionState.hideFollowersList
                 })
             });
@@ -1397,6 +1431,9 @@
                 `;
             }
 
+            const modalStamp = new Date(item.createdAt);
+            const modalDateStr = modalStamp.toLocaleDateString() + ' ' + modalStamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
             document.getElementById('lightbox-post-render-area').innerHTML = `
                 <div class="post-card" style="box-shadow:none; border:none; padding:0; margin-bottom:0; background:transparent;">
                     <div class="post-header">
@@ -1404,6 +1441,7 @@
                             <h5 style="cursor:pointer;" onclick="dismissLightboxOverlay(); viewProfileContext('${item.username}')">${item.fullName}</h5>
                             <h6>@${item.username}</h6>
                         </div>
+                        <span style="font-size:0.75rem; color:var(--steel-gray); font-weight:600; margin-left:auto; margin-right:10px;">${modalDateStr}</span>
                         <div class="post-lifespan-badge">${item.createdAt ? calculateTimeRemainingText(item.createdAt) : 'Showcase Gallery'}</div>
                     </div>
                     <div class="image-display-area" style="background-image:url('${item.img}'); height:340px; cursor:default;"></div>
@@ -1412,7 +1450,7 @@
                     
                     <div style="border-top:1px solid var(--card-border); padding-top:15px;">
                         <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:0.85rem; font-weight:bold;">Discussion Logs</span>
+                            <span style="font-size:0.85rem; font-weight:bold;">Discussion Logs (${item.commentCount || 0})</span>
                             <select style="width:auto; padding:2px 6px; font-size:0.75rem; margin-bottom:0;" onchange="loadPostCommentsLog('${item._id}', this.value, ${isArchivedSlot})">
                                 <option value="likes">Top Liked</option>
                                 <option value="newest">Newest</option>
@@ -1428,7 +1466,6 @@
             loadPostCommentsLog(item._id, 'likes', isArchivedSlot);
         }
 
-        // TRIGGER ENLARGED FULL-RESOLUTION VIEW MODAL FOR PERSONAL PIX LABELS
         function triggerEnlargedAvatarViewModal(imgSrc, usernameInitial) {
             const innerGraphic = imgSrc ? `<img src="${imgSrc}" style="width:100%; border-radius:24px; max-height:75vh; object-fit:contain;">` : `<div style="height:250px; width:250px; border-radius:50%; background:var(--dark-slate); color:white; display:flex; align-items:center; justify-content:center; font-size:5rem; font-weight:bold; margin:auto;">${usernameInitial}</div>`;
             document.getElementById('lightbox-post-render-area').innerHTML = `
@@ -1584,7 +1621,6 @@
                 buttonSlot.appendChild(messageBtn);
             }
 
-            // Sync rectangular background banner images data node elements
             const coverCanvas = document.getElementById('label-profile-banner-bg');
             if (contextData.bannerString) {
                 coverCanvas.style.backgroundImage = `url('${contextData.bannerString}')`;
@@ -1605,7 +1641,6 @@
                 bigAvatarNode.innerText = contextData.username.charAt(0).toUpperCase();
             }
             
-            // Map out zooming functionality to enlarge the profile picture seamlessly
             bigAvatarNode.onclick = () => triggerEnlargedAvatarViewModal(contextData.avatarString, contextData.username.charAt(0).toUpperCase());
 
             document.getElementById('label-profile-fullname').innerText = contextData.fullName;
@@ -1627,6 +1662,8 @@
                     slot.className = "hall-of-fame-slot";
                     slot.style.backgroundImage = `url('${item.img}')`;
                     slot.innerHTML = `<div class="hall-of-fame-badge">❤️ ${item.likes}</div>`;
+                    
+                    // Historical discussions remain fully accessible and preserved for profile view modes
                     slot.onclick = () => triggerEnlargedPostViewModal(item, true);
                 } else {
                     slot.className = "hall-of-fame-slot hall-slot-vacant";
@@ -1657,7 +1694,6 @@
             baseNode.innerHTML = '<h4 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:10px;">Channels</h4>';
             
             try {
-                // Fetch dynamic unread tracking summary lists before sidebar generation passes
                 const chatRes = await fetch(`${API_BASE_URL}/api/messages/unread-summary/${sessionState.username}`);
                 const summaryData = chatRes.ok ? await chatRes.json() : { senders: [] };
 
@@ -1667,7 +1703,6 @@
                         row.className = "dm-user-row";
                         row.id = `dm-row-${user.toLowerCase()}`;
                         
-                        // Map unread marker status indicators directly to rows
                         const holdsUnread = summaryData.senders.includes(user.toLowerCase());
                         const badgeMarkup = holdsUnread ? `<span style="background:#2563eb; color:white; font-size:0.7rem; padding:2px 6px; border-radius:10px; font-weight:bold;">1</span>` : '';
                         
@@ -1686,7 +1721,6 @@
             const targetRow = document.getElementById(`dm-row-${activeChatPartner}`);
             if (targetRow) {
                 targetRow.classList.add('active');
-                // Remove numeric indicator row parameters safely on opened channel threads
                 const indicator = targetRow.querySelector('span:nth-child(2)');
                 if(indicator) indicator.remove();
             }
@@ -1712,7 +1746,6 @@
                 const flowDir = msg.sender.toLowerCase() === sessionState.username.toLowerCase() ? 'sent' : 'received';
                 item.className = `chat-bubble ${flowDir}`;
                 
-                // Mapped receipt tokens directly onto sender data bubbles
                 let receiptString = '';
                 if (flowDir === 'sent' && msg.isRead) {
                     receiptString = `<span style="font-size:0.65rem; color:#94a3b8; display:block; text-align:right; margin-top:4px; font-weight:bold;">✓ Read</span>`;
